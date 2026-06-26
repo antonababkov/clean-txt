@@ -33,6 +33,15 @@ jobs:
         with:
           node-version: "20"
 
+      # Устанавливаем клиент PostgreSQL для выполнения SQL-скриптов
+      - name: Install PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+
+      # Создаём таблицы в базе данных
+      - name: Initialize database schema
+        run: |
+          PGPASSWORD=postgres psql -h localhost -U postgres -d clean_text_db -f backend/src/config/init.sql
+
       - name: Install backend dependencies
         run: |
           cd backend
