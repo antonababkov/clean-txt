@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    // Базовые настройки
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true, //True for dev. false for prod.
+
+    // Модули и сборка
+    "moduleResolution": "bundler", //Для Vite
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    //Строгая типизация
+    "strict": true,
+    "types": ["vite/client", "react", "react-dom"],
+    "exactOptionalPropertyTypes": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitOverride": true,
+
+    //Качество кода
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+
+    //Для работы с модулями
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    //Для дебага
+    "sourceMap": true,
+    "removeComments": true
+  },
+  "include": ["src", "src/**/*.d.ts", "src/**/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", "build", "**/*.test.ts", "**/*.spec.ts"]
+}

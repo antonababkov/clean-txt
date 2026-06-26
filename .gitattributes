@@ -1,0 +1,18 @@
+# Автоматически нормализовать все текстовые файлы к LF при коммите
+* text=auto
+
+# Явно указать LF для файлов JS/TS/JSON/HTML/CSS и т.д.
+*.js text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Для файлов, которые должны сохранять CRLF (редко)
+*.bat text eol=crlf
+*.cmd text eol=crlf
