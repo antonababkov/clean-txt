@@ -8,7 +8,7 @@ export const createTask = async (req, res, next) => {
     if (!originalText || typeof originalText !== "string") {
       throw new ValidationError("Текст обязателен");
     }
-    const cleanedText = cleanTextWithCache(originalText);
+    const cleanedText = await cleanTextWithCache(originalText);
     const task = await CleaningTask.create({
       userId: req.user.userId,
       originalText,
@@ -50,7 +50,7 @@ export const updateTask = async (req, res, next) => {
     if (!originalText || typeof originalText !== "string") {
       throw new ValidationError("Текст обязателен");
     }
-    const cleanedText = cleanTextWithCache(originalText);
+    const cleanedText = await cleanTextWithCache(originalText);
     const task = await CleaningTask.update(req.params.id, req.user.userId, {
       originalText,
       cleanedText,
