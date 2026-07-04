@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Home from "./pages/Home";
+import NewTask from "./pages/NewTask";
+import History from "./pages/History";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Navbar from "./components/common/Navbar";
 
@@ -18,6 +20,22 @@ function App() {
             element={
               <PrivateRoute>
                 <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/new"
+            element={
+              <PrivateRoute>
+                <NewTask />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              <PrivateRoute>
+                <History />
               </PrivateRoute>
             }
           />

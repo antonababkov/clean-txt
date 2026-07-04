@@ -4,8 +4,8 @@ class CleaningTask {
   static async create({ userId, originalText, cleanedText }) {
     const result = await pool.query(
       `INSERT INTO cleaning_tasks (user_id, original_text, cleaned_text)
-       VALUES ($1, $2, $3)
-       RETURNING id, user_id, original_text, cleaned_text, created_at`,
+     VALUES ($1, $2, $3)
+     RETURNING id, user_id, original_text, cleaned_text, created_at`,
       [userId, originalText, cleanedText],
     );
     return result.rows[0];
