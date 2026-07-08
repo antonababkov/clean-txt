@@ -23,7 +23,6 @@ app.use(morgan("dev"));
 app.use("/auth", authRoutes);
 app.use("/", taskRoutes);
 app.use("/", statsRoutes);
-app.use("/", taskRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
