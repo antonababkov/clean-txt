@@ -7,6 +7,8 @@ import { Pool } from "pg";
 
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import statsRoutes from "./routes/statsRoutes.js";
+import taskRoutes from "./routes/taskRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -19,6 +21,8 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/auth", authRoutes);
+app.use("/", taskRoutes);
+app.use("/", statsRoutes);
 app.use("/", taskRoutes);
 
 app.get("/health", (req, res) => {

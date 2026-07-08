@@ -20,7 +20,8 @@ router.get("/tasks/:id", getTaskById);
 router.put("/tasks/:id", updateTask);
 router.delete("/tasks/:id", deleteTask);
 
-// Админский маршрут
+// Админские маршруты
 router.get("/admin/tasks", isAdmin, adminGetAllTasks);
+router.delete("/admin/tasks/:id", isAdmin, adminDeleteTask);
 
 export default router;
