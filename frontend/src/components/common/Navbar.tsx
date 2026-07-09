@@ -22,7 +22,7 @@ const Navbar = () => {
               to="/"
               className="text-gray-700 dark:text-gray-300 hover:underline"
             >
-              Дашборд
+              Главная
             </Link>
             <Link
               to="/new"
@@ -37,12 +37,20 @@ const Navbar = () => {
               История
             </Link>
             {user?.role === "admin" && (
-              <Link
-                to="/admin"
-                className="text-gray-700 dark:text-gray-300 hover:underline"
-              >
-                Админка
-              </Link>
+              <>
+                <Link
+                  to="/admin"
+                  className="text-gray-700 dark:text-gray-300 hover:underline"
+                >
+                  Админка
+                </Link>
+                <Link
+                  to="/dashboard"
+                  className="text-gray-700 dark:text-gray-300 hover:underline"
+                >
+                  Графики
+                </Link>
+              </>
             )}
             <ThemeToggle />
             <button

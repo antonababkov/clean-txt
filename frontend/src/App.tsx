@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import NewTask from "./pages/NewTask";
 import History from "./pages/History";
 import PrivateRoute from "./components/common/PrivateRoute";
+import AdminPanel from "./components/admin/AdminPanel";
+import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/common/Navbar";
 
 function App() {
@@ -20,6 +22,15 @@ function App() {
             element={
               <PrivateRoute>
                 <Home />
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
               </PrivateRoute>
             }
           />
