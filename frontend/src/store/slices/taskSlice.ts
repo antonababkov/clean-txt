@@ -6,6 +6,7 @@ interface Task {
   original_text: string;
   cleaned_text: string;
   created_at: string;
+  user_id: number;
 }
 
 interface TasksState {
