@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/slices/authSlice";
@@ -22,7 +23,7 @@ const Navbar = () => {
               to="/"
               className="text-gray-700 dark:text-gray-300 hover:underline"
             >
-              Главная
+              Дашборд
             </Link>
             <Link
               to="/new"
@@ -37,20 +38,12 @@ const Navbar = () => {
               История
             </Link>
             {user?.role === "admin" && (
-              <>
-                <Link
-                  to="/admin"
-                  className="text-gray-700 dark:text-gray-300 hover:underline"
-                >
-                  Админка
-                </Link>
-                <Link
-                  to="/dashboard"
-                  className="text-gray-700 dark:text-gray-300 hover:underline"
-                >
-                  Графики
-                </Link>
-              </>
+              <Link
+                to="/admin"
+                className="text-gray-700 dark:text-gray-300 hover:underline"
+              >
+                Админка
+              </Link>
             )}
             <ThemeToggle />
             <button
