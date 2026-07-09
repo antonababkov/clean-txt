@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
 import NewTask from "./pages/NewTask";
 import History from "./pages/History";
+import AdminPanel from "./components/admin/AdminPanel";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Navbar from "./components/common/Navbar";
 
@@ -19,7 +20,7 @@ function App() {
             path="/"
             element={
               <PrivateRoute>
-                <Home />
+                <Dashboard />
               </PrivateRoute>
             }
           />
@@ -36,6 +37,14 @@ function App() {
             element={
               <PrivateRoute>
                 <History />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute>
+                <AdminPanel />
               </PrivateRoute>
             }
           />
