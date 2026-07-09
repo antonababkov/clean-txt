@@ -22,7 +22,6 @@ function App() {
             element={
               <PrivateRoute>
                 <Home />
-                <Dashboard />
               </PrivateRoute>
             }
           />
@@ -47,6 +46,14 @@ function App() {
             element={
               <PrivateRoute>
                 <History />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute>
+                <AdminPanel />
               </PrivateRoute>
             }
           />
