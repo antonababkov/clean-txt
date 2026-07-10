@@ -1,1 +1,22 @@
 @import "tailwindcss";
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+html.light {
+  --bg-color: #ffffff;
+  --text-color: #1a202c;
+}
+
+html.dark {
+  --bg-color: #1a202c;
+  --text-color: #f7fafc;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
