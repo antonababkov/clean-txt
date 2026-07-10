@@ -2,20 +2,19 @@ import pool from "../config/db.js";
 
 class RequestLog {
   // Получить количество запросов по дням для конкретного пользователя (или всех)
-  static async getDailyStats(userId = null, days = 7) {
-    const whereClause = userId ? "WHERE user_id = $1" : "";
-    const params = userId ? [userId, days] : [days];
-    const query = `
-      SELECT 
-        DATE(timestamp) as date,
-        COUNT(*) as count
-      FROM request_logs
-      ${whereClause}
-      AND timestamp >= NOW() - INTERVAL '${days} days'
-      GROUP BY DATE(timestamp)
-      ORDER BY date ASC
-    `;
-    const result = await pool.query(query, params);
+  static async getDailyStats(days) {
+    // Убедитесь, что days — число
+    const daysInt = parseInt(days) || 7;
+    if (daysInt < 1) daysInt = 1;
+
+    const result = await pool.query(
+      `SELECT DATE(timestamp) AS day, COUNT(*) AS count
+       FROM request_logs
+       WHERE timestamp >= NOW() - INTERVAL '1 day' * $1
+       GROUP BY day
+       ORDER BY day ASC`,
+      [daysInt], // ровно один параметр
+    );
     return result.rows;
   }
 
