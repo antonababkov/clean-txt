@@ -2,9 +2,8 @@ import RequestLog from "../models/RequestLog.js";
 
 export const getDailyStats = async (req, res, next) => {
   try {
-    const userId = req.user.role === "admin" ? null : req.user.userId;
-    const days = parseInt(req.query.days) || 7;
-    const stats = await RequestLog.getDailyStats(userId, days);
+    const days = req.query.days || 7;
+    const stats = await RequestLog.getDailyStats(days);
     res.json(stats);
   } catch (err) {
     next(err);
