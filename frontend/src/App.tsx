@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Dashboard from "./pages/Dashboard";
@@ -9,6 +10,10 @@ import PrivateRoute from "./components/common/PrivateRoute";
 import Navbar from "./components/common/Navbar";
 
 function App() {
+  useEffect(() => {
+    const theme = localStorage.getItem("theme") || "light";
+    document.documentElement.className = theme;
+  }, []);
   return (
     <BrowserRouter>
       <Navbar />
