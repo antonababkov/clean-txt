@@ -11,13 +11,37 @@ import taskRoutes from "./routes/taskRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
+// Список разрешённых origin (для разработки и продакшена)
+const allowedOrigins = [
+  "http://localhost:5173", // Vite по умолчанию
+  "http://localhost:3000", // возможный порт
+  "https://ваш-домен.ру", // для продакшена
+];
+
 dotenv.config();
 
 const app = express();
 
 app.use(cookieParser());
 app.use(helmet());
-app.use(cors());
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Разрешаем запросы без origin (например, от curl/Postman) в разработке
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // разрешаем отправку cookies
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
 app.use(express.json());
 app.use(morgan("dev"));
 
