@@ -27,7 +27,7 @@ describe("Auth Endpoints", () => {
         .expect(201);
 
       expect(res.body).toHaveProperty("user");
-      expect(res.body).toHaveProperty("token");
+      expect(res.body).toHaveProperty("accessToken");
       expect(res.body.user.email).toBe(testUser.email);
     });
 
@@ -68,7 +68,7 @@ describe("Auth Endpoints", () => {
         .send({ email: testUser.email, password: testUser.password })
         .expect(200);
 
-      expect(res.body).toHaveProperty("token");
+      expect(res.body).toHaveProperty("accessToken");
       expect(res.body.user.email).toBe(testUser.email);
     });
 
@@ -81,7 +81,7 @@ describe("Auth Endpoints", () => {
   });
 
   describe("GET /auth/me", () => {
-    let token;
+    let accessToken;
 
     // Создаём пользователя и получаем токен перед тестами
     beforeAll(async () => {
@@ -93,7 +93,7 @@ describe("Auth Endpoints", () => {
       const res = await request(app)
         .post("/auth/login")
         .send({ email: testUser.email, password: testUser.password });
-      token = res.body.token;
+      accessToken = res.body.accessToken;
     });
 
     afterAll(async () => {
@@ -103,7 +103,7 @@ describe("Auth Endpoints", () => {
     it("должен вернуть профиль пользователя по токену", async () => {
       const res = await request(app)
         .get("/auth/me")
-        .set("Authorization", `Bearer ${token}`)
+        .set("Authorization", `Bearer ${accessToken}`)
         .expect(200);
 
       expect(res.body.email).toBe(testUser.email);

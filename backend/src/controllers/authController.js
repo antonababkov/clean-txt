@@ -96,7 +96,17 @@ export const refreshToken = async (req, res, next) => {
     next(err);
   }
 };
-
+export const getMe = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+};
 // Эндпоинт для выхода (очищает refresh cookie)
 export const logout = (req, res) => {
   res.clearCookie("refreshToken", {

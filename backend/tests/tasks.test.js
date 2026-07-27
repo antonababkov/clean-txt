@@ -26,7 +26,7 @@ describe("Tasks API", () => {
   beforeAll(async () => {
     // 1. Создаём обычного пользователя через API
     const userRes = await request(app).post("/auth/register").send(testUser);
-    userToken = userRes.body.token;
+    userToken = userRes.body.accessToken;
 
     // 2. Создаём админа напрямую в БД с ролью admin
     const hashedAdminPassword = await hashPassword(adminUser.password);
@@ -41,7 +41,7 @@ describe("Tasks API", () => {
     const adminLogin = await request(app)
       .post("/auth/login")
       .send({ email: adminUser.email, password: adminUser.password });
-    adminToken = adminLogin.body.token;
+    adminToken = adminLogin.body.accessToken;
 
     // 3. Создаём тестовое задание для обычного пользователя
     const createRes = await request(app)
