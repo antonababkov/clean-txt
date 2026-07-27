@@ -8,16 +8,14 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
-  const { loading, error, accessToken, user } = useAppSelector(
-    (state) => state.auth,
-  );
+  const { loading, error, accessToken } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (accessToken && user) {
+    if (accessToken) {
       navigate("/new", { replace: true });
     }
-  }, [accessToken, user, navigate]);
+  }, [accessToken, navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
