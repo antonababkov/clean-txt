@@ -5,7 +5,7 @@ import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
-  const token = useAppSelector((state) => state.auth.token);
+  const token = useAppSelector((state) => state.auth.accessToken);
   const user = useAppSelector((state) => state.auth.user);
 
   const handleLogout = () => dispatch(logout());
