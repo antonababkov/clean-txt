@@ -1,9 +1,19 @@
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 
-const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
-  const token = useAppSelector((state) => state.auth.token);
-  if (!token) return <Navigate to="/login" replace />;
+interface PrivateRouteProps {
+  children: React.ReactNode;
+}
+
+const PrivateRoute = ({ children }: PrivateRouteProps) => {
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
+
+  if (!accessToken) {
+    // Если токена нет, перенаправляем на страницу входа
+    return <Navigate to="/login" replace />;
+  }
+
+  // Если токен есть, рендерим дочерние компоненты (защищённую страницу)
   return children;
 };
 

@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -14,6 +15,7 @@ dotenv.config();
 
 const app = express();
 
+app.use(cookieParser());
 app.use(helmet());
 app.use(cors());
 app.use(express.json());

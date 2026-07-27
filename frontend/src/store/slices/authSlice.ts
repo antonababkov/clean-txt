@@ -9,14 +9,14 @@ interface User {
 
 interface AuthState {
   user: User | null;
-  token: string | null;
+  accessToken: string | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem("token"),
+  accessToken: localStorage.getItem("accessToken") || null,
   loading: false,
   error: null,
 };
@@ -25,7 +25,7 @@ export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password }: { email: string; password: string }) => {
     const res = await api.post("/auth/login", { email, password });
-    return res.data; // { user, token }
+    return res.data; // { user, accessToken }
   },
 );
 
@@ -39,17 +39,23 @@ export const register = createAsyncThunk(
 
 export const fetchMe = createAsyncThunk("auth/me", async (_, { getState }) => {
   const res = await api.get("/auth/me");
-  return res.data; // user
+  return res.data;
 });
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    setAccessToken(state, action) {
+      state.accessToken = action.payload;
+      localStorage.setItem("accessToken", action.payload);
+    },
     logout(state) {
       state.user = null;
-      state.token = null;
-      localStorage.removeItem("token");
+      state.accessToken = null;
+      localStorage.removeItem("accessToken");
+      // опционально: вызвать api.post('/auth/logout') для очистки cookie
+      api.post("/auth/logout").catch(() => {});
     },
   },
   extraReducers: (builder) => {
@@ -61,8 +67,8 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.token;
-        localStorage.setItem("token", action.payload.token);
+        state.accessToken = action.payload.accessToken;
+        localStorage.setItem("accessToken", action.payload.accessToken);
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -75,8 +81,8 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.token;
-        localStorage.setItem("token", action.payload.token);
+        state.accessToken = action.payload.accessToken;
+        localStorage.setItem("accessToken", action.payload.accessToken);
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
@@ -87,11 +93,11 @@ const authSlice = createSlice({
       })
       .addCase(fetchMe.rejected, (state) => {
         state.user = null;
-        state.token = null;
-        localStorage.removeItem("token");
+        state.accessToken = null;
+        localStorage.removeItem("accessToken");
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { setAccessToken, logout } = authSlice.actions;
 export default authSlice.reducer;
