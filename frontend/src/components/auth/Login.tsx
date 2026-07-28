@@ -30,7 +30,7 @@ const Login = () => {
       <h2 className="text-2xl font-bold mb-4">Вход</h2>
       <form onSubmit={handleSubmit}>
         <input
-          className="w-full border p-2 mb-2"
+          className="w-full border p-2 mb-2 "
           type="email"
           placeholder="Email"
           value={email}
@@ -38,7 +38,7 @@ const Login = () => {
           required
         />
         <input
-          className="w-full border p-2 mb-2"
+          className="w-full border p-2 mb-2 "
           type="password"
           placeholder="Пароль"
           value={password}
