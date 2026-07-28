@@ -1,9 +1,5 @@
 @import "tailwindcss";
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
-
-html.light {
+/* html.light {
   --bg-color: #ffffff;
   --text-color: #1a202c;
 }
@@ -19,4 +15,4 @@ body {
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
-}
+} */

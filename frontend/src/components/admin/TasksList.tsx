@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchTasks, deleteTask } from "../../store/slices/taskSlice";
 
-const AdminPanel = () => {
+const TasksList = () => {
   const dispatch = useAppDispatch();
   const { tasks, total, loading } = useAppSelector((state) => state.tasks);
   const [page, setPage] = useState(0);
@@ -78,4 +78,4 @@ const AdminPanel = () => {
   );
 };
 
-export default AdminPanel;
+export default TasksList;
