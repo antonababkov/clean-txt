@@ -5,11 +5,13 @@ interface User {
   id: number;
   email: string;
   role: string;
+  created_at?: string;
 }
 
 interface AuthState {
   user: User | null;
   accessToken: string | null;
+  isLoadingUser: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -17,6 +19,7 @@ interface AuthState {
 const initialState: AuthState = {
   user: null,
   accessToken: localStorage.getItem("accessToken") || null,
+  isLoadingUser: false,
   loading: false,
   error: null,
 };
@@ -37,10 +40,19 @@ export const register = createAsyncThunk(
   },
 );
 
-export const fetchMe = createAsyncThunk("auth/me", async (_, { getState }) => {
-  const res = await api.get("/auth/me");
-  return res.data;
-});
+export const fetchMe = createAsyncThunk(
+  "auth/me",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await api.get("/auth/me");
+      return res.data;
+    } catch (err: any) {
+      return rejectWithValue(
+        err.response?.data?.message || "Ошибка загрузки профиля",
+      );
+    }
+  },
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -53,6 +65,8 @@ const authSlice = createSlice({
     logout(state) {
       state.user = null;
       state.accessToken = null;
+      state.isLoadingUser = false;
+      state.error = null;
       localStorage.removeItem("accessToken");
       // опционально: вызвать api.post('/auth/logout') для очистки cookie
       api.post("/auth/logout").catch(() => {});
@@ -88,10 +102,15 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Ошибка регистрации";
       })
+      .addCase(fetchMe.pending, (state) => {
+        state.isLoadingUser = true;
+      })
       .addCase(fetchMe.fulfilled, (state, action) => {
+        state.isLoadingUser = false;
         state.user = action.payload;
       })
       .addCase(fetchMe.rejected, (state) => {
+        state.isLoadingUser = false;
         state.user = null;
         state.accessToken = null;
         localStorage.removeItem("accessToken");
