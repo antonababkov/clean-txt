@@ -8,6 +8,7 @@ import History from "./pages/History";
 import AdminPanel from "./components/admin/AdminPanel";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Navbar from "./components/common/Navbar";
+import NotFound404 from "./pages/NotFound404";
 
 function App() {
   useEffect(() => {
@@ -53,6 +54,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="*" element={<NotFound404 />} />
         </Routes>
       </div>
     </BrowserRouter>
