@@ -47,7 +47,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="p-1 text-red-500">{error}</p>}
         <button
           className="w-full p-2 text-white bg-blue-500 rounded cursor-pointer hover:bg-blue-600"
           type="submit"
