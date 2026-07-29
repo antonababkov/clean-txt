@@ -18,10 +18,10 @@ const NewTask = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Очистка текста</h2>
+      <h2 className="mb-4 text-2xl font-bold">Очистка текста</h2>
       <form onSubmit={handleSubmit}>
         <textarea
-          className="w-full border p-2 rounded mb-2"
+          className="w-full p-2 mb-2 border rounded"
           rows={6}
           placeholder="Введите текст с HTML или лишними пробелами..."
           value={text}
@@ -29,14 +29,14 @@ const NewTask = () => {
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="px-4 py-2 text-white bg-blue-500 rounded"
           disabled={loading}
         >
           {loading ? "Очистка..." : "Очистить"}
         </button>
       </form>
       {cleaned && (
-        <div className="mt-4 p-4 border rounded bg-gray-50">
+        <div className="p-4 mt-4 border rounded">
           <h3 className="font-semibold">Очищенный текст:</h3>
           <p>{cleaned}</p>
         </div>
