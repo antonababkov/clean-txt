@@ -1,9 +1,8 @@
 import pool from "../config/db.js";
 
 class RequestLog {
-  // Получить количество запросов по дням для конкретного пользователя (или всех)
-  static async getDailyStats(days) {
-    // Убедитесь, что days — число
+  // Получить количество созданий задач по дням для конкретного пользователя
+  static async getDailyStats(userId, days) {
     const daysInt = parseInt(days) || 7;
     if (daysInt < 1) daysInt = 1;
 
@@ -11,38 +10,39 @@ class RequestLog {
       `SELECT DATE(timestamp) AS day, COUNT(*) AS count
        FROM request_logs
        WHERE timestamp >= NOW() - INTERVAL '1 day' * $1
+         AND user_id = $2
+         AND endpoint = '/tasks'
+         AND method = 'POST'
        GROUP BY day
        ORDER BY day ASC`,
-      [daysInt], // ровно один параметр
+      [daysInt, userId],
     );
     return result.rows;
   }
 
-  // Получить количество запросов по часам для конкретного дня
-  static async getHourlyStats(userId = null, date = null) {
-    const dateCondition = date
-      ? `DATE(timestamp) = '${date}'`
-      : `DATE(timestamp) = CURRENT_DATE`;
-    const whereClause = userId
-      ? `user_id = $1 AND ${dateCondition}`
-      : dateCondition;
-    const params = userId ? [userId] : [];
-    const query = `
-      SELECT 
+  // Получить количество созданий задач по часам для конкретного пользователя за сегодня
+  static async getHourlyStats(userId) {
+    const result = await pool.query(
+      `SELECT 
         EXTRACT(HOUR FROM timestamp) as hour,
         COUNT(*) as count
-      FROM request_logs
-      WHERE ${whereClause}
-      GROUP BY hour
-      ORDER BY hour ASC
-    `;
-    const result = await pool.query(query, params);
+       FROM request_logs
+       WHERE DATE(timestamp) = CURRENT_DATE
+         AND user_id = $1
+         AND endpoint = '/tasks'
+         AND method = 'POST'
+       GROUP BY hour
+       ORDER BY hour ASC`,
+      [userId],
+    );
     return result.rows;
   }
 
-  // Получить общее количество запросов (для админа)
+  // Получить общее количество созданий задач (для админа – опционально)
   static async getTotalCount() {
-    const result = await pool.query("SELECT COUNT(*) FROM request_logs");
+    const result = await pool.query(
+      "SELECT COUNT(*) FROM request_logs WHERE endpoint = '/tasks' AND method = 'POST'",
+    );
     return parseInt(result.rows[0].count);
   }
 }
