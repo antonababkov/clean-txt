@@ -5,6 +5,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import { Pool } from "pg";
+import pool from "./config/db.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
@@ -21,10 +22,7 @@ const allowedOrigins = [
 dotenv.config();
 
 const app = express();
-
-app.use(cookieParser());
 app.use(helmet());
-
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -41,17 +39,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
-
-app.use(express.json());
-app.use(morgan("dev"));
-
-app.use("/auth", authRoutes);
-app.use("/", taskRoutes);
-app.use("/", statsRoutes);
-
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", timestamp: new Date().toISOString() });
-});
 // Логирование запросов в request_logs
 app.use((req, res, next) => {
   const start = Date.now();
@@ -73,6 +60,18 @@ app.use((req, res, next) => {
       .catch((err) => console.error("Log error:", err));
   });
   next();
+});
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(morgan("dev"));
+
+app.use("/auth", authRoutes);
+app.use("/", taskRoutes);
+app.use("/", statsRoutes);
+
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
 app.use(errorHandler);

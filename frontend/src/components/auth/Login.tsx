@@ -26,28 +26,30 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded shadow">
-      <h2 className="text-2xl font-bold mb-4">Вход</h2>
+    <div className="max-w-md p-6 mx-auto mt-10 border rounded shadow">
+      <h2 className="mb-4 text-2xl font-bold">Вход</h2>
       <form onSubmit={handleSubmit}>
         <input
-          className="w-full border p-2 mb-2 "
+          className="w-full p-2 mb-2 text-gray-800 border dark:text-gray-300"
           type="email"
+          name="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
-          className="w-full border p-2 mb-2 "
+          className="w-full p-2 mb-2 text-gray-800 border dark:text-gray-300 "
           type="password"
+          name="password"
           placeholder="Пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="p-1 text-red-500">{error}</p>}
         <button
-          className="w-full bg-blue-500 text-white p-2 rounded"
+          className="w-full p-2 text-white bg-blue-500 rounded cursor-pointer hover:bg-blue-600"
           type="submit"
           disabled={loading}
         >

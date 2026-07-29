@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axiosConfig";
 
 interface StatsState {
-  daily: Array<{ date: string; count: number }>;
+  daily: Array<{ date: string; count: number; day: string }>;
   hourly: Array<{ hour: number; count: number }>;
   total: number;
   loading: boolean;

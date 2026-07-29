@@ -5,7 +5,7 @@ import { logout, setAccessToken } from "../store/slices/authSlice";
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: { "Content-Type": "application/json" },
-  withCredentials: true, // важно для отправки cookies
+  withCredentials: true,
 });
 
 // Интерцептор для добавления access token
@@ -37,9 +37,17 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    // Игнорируем 401 на эндпоинтах /auth/login и /auth/register
+    if (
+      originalRequest.url?.includes("/auth/login") ||
+      originalRequest.url?.includes("/auth/register")
+    ) {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // Если уже идёт обновление, добавляем в очередь
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
@@ -60,18 +68,20 @@ api.interceptors.response.use(
           { withCredentials: true },
         );
         const newAccessToken = response.data.accessToken;
-        // Сохраняем в Redux и localStorage
         store.dispatch(setAccessToken(newAccessToken));
-        // Обновляем заголовок для исходного запроса
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         processQueue(null, newAccessToken);
         return api(originalRequest);
       } catch (refreshError) {
-        // Если обновление не удалось (refresh token просрочен или невалиден)
         processQueue(refreshError, null);
         store.dispatch(logout());
-        // Перенаправляем на страницу логина
-        window.location.href = "/login";
+        // Перенаправляем на страницу логина, но только если мы не на ней уже
+        if (
+          !window.location.pathname.includes("/login") &&
+          !window.location.pathname.includes("/register")
+        ) {
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

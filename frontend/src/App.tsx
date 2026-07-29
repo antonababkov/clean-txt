@@ -26,7 +26,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen text-gray-900 transition-colors duration-300 bg-white dark:bg-gray-900 dark:text-gray-100">
+      <div className="min-h-screen text-gray-900 transition-colors duration-300 bg-neutral-100 dark:bg-gray-900 dark:text-gray-100">
         <AuthLoader>
           <Navbar />
           <div className="container mx-auto mt-4">

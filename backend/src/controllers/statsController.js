@@ -3,7 +3,8 @@ import RequestLog from "../models/RequestLog.js";
 export const getDailyStats = async (req, res, next) => {
   try {
     const days = req.query.days || 7;
-    const stats = await RequestLog.getDailyStats(days);
+    const userId = req.user.userId; // всегда используем текущего пользователя
+    const stats = await RequestLog.getDailyStats(userId, days);
     res.json(stats);
   } catch (err) {
     next(err);
@@ -12,9 +13,8 @@ export const getDailyStats = async (req, res, next) => {
 
 export const getHourlyStats = async (req, res, next) => {
   try {
-    const userId = req.user.role === "admin" ? null : req.user.userId;
-    const date = req.query.date || null;
-    const stats = await RequestLog.getHourlyStats(userId, date);
+    const userId = req.user.userId;
+    const stats = await RequestLog.getHourlyStats(userId);
     res.json(stats);
   } catch (err) {
     next(err);

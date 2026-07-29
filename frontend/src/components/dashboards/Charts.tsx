@@ -38,7 +38,14 @@ const Charts = () => {
   if (loading) return <div className="text-center">Загрузка графиков...</div>;
 
   const dailyData = {
-    labels: daily.map((item) => new Date(item.date).toLocaleDateString()),
+    labels: daily.map((item) => {
+      // Используем поле day (которое приходит с сервера)
+      const dateStr = item.day; // fallback на случай другого названия
+      return new Date(dateStr).toLocaleDateString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+      });
+    }),
     datasets: [
       {
         label: "Количество запросов",
@@ -64,15 +71,15 @@ const Charts = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-        <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="p-4 bg-white rounded shadow dark:bg-gray-800">
+        <h3 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white">
           Запросы за последние 7 дней
         </h3>
         <Line data={dailyData} />
       </div>
-      <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-        <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
+      <div className="p-4 bg-white rounded shadow dark:bg-gray-800">
+        <h3 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white">
           Запросы по часам (сегодня)
         </h3>
         <Line data={hourlyData} />
