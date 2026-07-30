@@ -6,7 +6,7 @@ import {
   getTaskById,
   updateTask,
   deleteTask,
-  adminGetAllTasks,
+  adminGetTasks,
   adminDeleteTask,
 } from "../controllers/taskController.js";
 
@@ -22,7 +22,7 @@ router.put("/tasks/:id", updateTask);
 router.delete("/tasks/:id", deleteTask);
 
 // Админские маршруты
-router.get("/admin/tasks", isAdmin, adminGetAllTasks);
+router.get("/admin/tasks", isAdmin, adminGetTasks);
 router.delete("/admin/tasks/:id", isAdmin, adminDeleteTask);
 
 export default router;

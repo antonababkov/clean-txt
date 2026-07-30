@@ -72,8 +72,7 @@ export const deleteTask = async (req, res, next) => {
     next(err);
   }
 };
-
-// Админские эндпоинты
+// adminGetAllTasks - проверить, используется ли ещё где-то, если нет - удалить.
 export const adminGetAllTasks = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
@@ -96,6 +95,29 @@ export const adminDeleteTask = async (req, res, next) => {
       throw new NotFoundError("Задание не найдено");
     }
     res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};
+export const adminGetTasks = async (req, res, next) => {
+  try {
+    const userId = req.query.userId || null;
+    const days = req.query.days || null;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = parseInt(req.query.offset) || 0;
+
+    const result = await CleaningTask.adminGetTasks({
+      userId,
+      days,
+      limit,
+      offset,
+    });
+    res.json({
+      tasks: result.tasks,
+      total: result.total,
+      limit,
+      offset,
+    });
   } catch (err) {
     next(err);
   }

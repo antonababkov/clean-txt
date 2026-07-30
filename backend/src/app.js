@@ -10,6 +10,7 @@ import pool from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 // Список разрешённых origin (для разработки и продакшена)
@@ -69,6 +70,7 @@ app.use(morgan("dev"));
 app.use("/auth", authRoutes);
 app.use("/", taskRoutes);
 app.use("/", statsRoutes);
+app.use("/", userRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
