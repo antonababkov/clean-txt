@@ -9,10 +9,10 @@ const AdminPanel = () => {
           Здесь будет админ-панель со статистикой и управлением пользователями.
         </p>
         {/* Можно добавить статистику, список пользователей, управление задачами и т.д. */}
-        <Link to="/admin/tasks" className="text-gray-700 hover:underline">
-          Список задач на очистку
-        </Link>
       </div>
+      <Link to="/admin/tasks" className="text-gray-700 hover:underline">
+        Список задач на очистку
+      </Link>
     </div>
   );
 };

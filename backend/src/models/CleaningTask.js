@@ -73,6 +73,76 @@ class CleaningTask {
       total: parseInt(countResult.rows[0].count),
     };
   }
+
+  static async adminGetTasks({
+    userId = null,
+    days = null,
+    limit = 10,
+    offset = 0,
+  } = {}) {
+    // Базовый запрос с JOIN для получения email пользователя
+    let query = `
+    SELECT 
+      ct.id,
+      ct.user_id,
+      u.email,
+      ct.original_text,
+      ct.cleaned_text,
+      ct.created_at,
+      ct.updated_at
+    FROM cleaning_tasks ct
+    LEFT JOIN users u ON ct.user_id = u.id
+    WHERE 1=1
+  `;
+    const params = [];
+    let paramIndex = 1;
+
+    if (userId) {
+      query += ` AND ct.user_id = $${paramIndex}`;
+      params.push(userId);
+      paramIndex++;
+    }
+
+    if (days) {
+      query += ` AND ct.created_at >= NOW() - INTERVAL '1 day' * $${paramIndex}`;
+      params.push(parseInt(days));
+      paramIndex++;
+    }
+
+    // Сортировка и пагинация
+    query += ` ORDER BY ct.created_at DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+    params.push(parseInt(limit), parseInt(offset));
+
+    const result = await pool.query(query, params);
+
+    // Получить общее количество для пагинации (без учёта limit/offset)
+    let countQuery = `
+    SELECT COUNT(*) 
+    FROM cleaning_tasks ct
+    WHERE 1=1
+  `;
+    const countParams = [];
+    let countIndex = 1;
+
+    if (userId) {
+      countQuery += ` AND ct.user_id = $${countIndex}`;
+      countParams.push(userId);
+      countIndex++;
+    }
+    if (days) {
+      countQuery += ` AND ct.created_at >= NOW() - INTERVAL '1 day' * $${countIndex}`;
+      countParams.push(parseInt(days));
+      countIndex++;
+    }
+
+    const countResult = await pool.query(countQuery, countParams);
+    const total = parseInt(countResult.rows[0].count);
+
+    return {
+      tasks: result.rows,
+      total,
+    };
+  }
 }
 
 export default CleaningTask;
