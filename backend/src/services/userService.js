@@ -18,12 +18,14 @@ export const registerUser = async (email, password) => {
 export const loginUser = async (email, password) => {
   const user = await User.findByEmail(email);
   if (!user) {
-    throw new AuthenticationError("Неверный email или пароль");
+    throw new AuthenticationError(
+      "Пользователь с таким email не зарегистрирован",
+    );
   }
 
   const match = await bcrypt.compare(password, user.password_hash);
   if (!match) {
-    throw new AuthenticationError("Неверный email или пароль");
+    throw new AuthenticationError("Неверный пароль");
   }
 
   return user;

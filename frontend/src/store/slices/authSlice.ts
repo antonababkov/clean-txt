@@ -26,17 +26,38 @@ const initialState: AuthState = {
 
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ email, password }: { email: string; password: string }) => {
-    const res = await api.post("/auth/login", { email, password });
-    return res.data; // { user, accessToken }
+  async (
+    { email, password }: { email: string; password: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const res = await api.post("/auth/login", { email, password });
+      return res.data; // { user, accessToken }
+    } catch (err: any) {
+      // Если сервер вернул сообщение об ошибке, передаём его
+      if (err.response?.data?.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Ошибка входа");
+    }
   },
 );
 
 export const register = createAsyncThunk(
   "auth/register",
-  async ({ email, password }: { email: string; password: string }) => {
-    const res = await api.post("/auth/register", { email, password });
-    return res.data;
+  async (
+    { email, password }: { email: string; password: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const res = await api.post("/auth/register", { email, password });
+      return res.data;
+    } catch (err: any) {
+      if (err.response?.data?.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Ошибка регистрации");
+    }
   },
 );
 
@@ -86,7 +107,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Ошибка входа";
+        state.error = (action.payload as string) || "Ошибка входа";
       })
       .addCase(register.pending, (state) => {
         state.loading = true;
@@ -100,7 +121,7 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Ошибка регистрации";
+        state.error = (action.payload as string) || "Ошибка регистрации";
       })
       .addCase(fetchMe.pending, (state) => {
         state.isLoadingUser = true;
