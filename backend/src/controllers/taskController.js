@@ -73,16 +73,16 @@ export const deleteTask = async (req, res, next) => {
   }
 };
 // adminGetAllTasks - проверить, используется ли ещё где-то, если нет - удалить.
-export const adminGetAllTasks = async (req, res, next) => {
-  try {
-    const limit = parseInt(req.query.limit) || 10;
-    const offset = parseInt(req.query.offset) || 0;
-    const { tasks, total } = await CleaningTask.findAll({ limit, offset });
-    res.json({ tasks, total, limit, offset });
-  } catch (err) {
-    next(err);
-  }
-};
+// export const adminGetAllTasks = async (req, res, next) => {
+//   try {
+//     const limit = parseInt(req.query.limit) || 10;
+//     const offset = parseInt(req.query.offset) || 0;
+//     const { tasks, total } = await CleaningTask.findAll({ limit, offset });
+//     res.json({ tasks, total, limit, offset });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 export const adminDeleteTask = async (req, res, next) => {
   try {
     const taskId = req.params.id;
