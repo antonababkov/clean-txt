@@ -21,6 +21,25 @@ export const getHourlyStats = async (req, res, next) => {
   }
 };
 
+export const getDailyStatsAll = async (req, res, next) => {
+  try {
+    const days = req.query.days || 7;
+    const stats = await RequestLog.getDailyStatsAll(days);
+    res.json(stats);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getHourlyStatsAll = async (req, res, next) => {
+  try {
+    const stats = await RequestLog.getHourlyStatsAll();
+    res.json(stats);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getTotalCount = async (req, res, next) => {
   try {
     const count = await RequestLog.getTotalCount();
