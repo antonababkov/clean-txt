@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchTasks, deleteTask } from "../store/slices/taskSlice";
+import { fetchTasks } from "../store/slices/taskSlice";
 
 const History = () => {
   const dispatch = useAppDispatch();
@@ -12,19 +12,13 @@ const History = () => {
     dispatch(fetchTasks({ limit, offset: page * limit }));
   }, [dispatch, page]);
 
-  const handleDelete = (id: number) => {
-    if (window.confirm("Удалить задание?")) {
-      dispatch(deleteTask(id));
-    }
-  };
-
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">История очистки</h2>
+      <h2 className="mb-4 text-2xl font-bold">История очистки</h2>
       {loading && <p>Загрузка...</p>}
       <div className="space-y-4">
         {tasks.map((task) => (
-          <div key={task.id} className="border p-3 rounded">
+          <div key={task.id} className="p-3 border rounded">
             <p>
               <strong>Исходный:</strong> {task.original_text.substring(0, 100)}
               ...
@@ -35,16 +29,10 @@ const History = () => {
             <p className="text-sm text-gray-500">
               {new Date(task.created_at).toLocaleString()}
             </p>
-            <button
-              onClick={() => handleDelete(task.id)}
-              className="text-red-500 text-sm mt-2"
-            >
-              Удалить
-            </button>
           </div>
         ))}
       </div>
-      <div className="mt-4 flex justify-between">
+      <div className="flex justify-between mt-4">
         <button
           onClick={() => setPage((p) => Math.max(0, p - 1))}
           disabled={page === 0}
