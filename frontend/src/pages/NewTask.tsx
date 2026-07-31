@@ -52,7 +52,6 @@ const NewTask = () => {
         </div>
       </form>
 
-      {/* Блок результата со спиннером */}
       <div className="mt-4 p-4 border rounded bg-gray-50 dark:bg-gray-800 min-h-[80px]">
         {loading && !cleaned ? (
           <LoadingSpinner />

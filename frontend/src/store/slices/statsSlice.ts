@@ -2,24 +2,28 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axiosConfig";
 
 interface StatsState {
-  daily: Array<{ date: string; count: number; day: string }>;
-  hourly: Array<{ hour: number; count: number }>;
-  total: number;
+  daily: { day: string; count: number }[];
+  hourly: { hour: number; count: number }[];
+  adminDaily: { day: string; count: number }[];
+  adminHourly: { hour: number; count: number }[];
   loading: boolean;
+  adminLoading: boolean;
   error: string | null;
 }
 
 const initialState: StatsState = {
   daily: [],
   hourly: [],
-  total: 0,
+  adminDaily: [],
+  adminHourly: [],
   loading: false,
+  adminLoading: false,
   error: null,
 };
 
 export const fetchDailyStats = createAsyncThunk(
   "stats/fetchDaily",
-  async (days: number = 7) => {
+  async (days: number) => {
     const res = await api.get(`/stats/daily?days=${days}`);
     return res.data;
   },
@@ -27,18 +31,26 @@ export const fetchDailyStats = createAsyncThunk(
 
 export const fetchHourlyStats = createAsyncThunk(
   "stats/fetchHourly",
-  async (date?: string) => {
-    const url = date ? `/stats/hourly?date=${date}` : "/stats/hourly";
-    const res = await api.get(url);
+  async () => {
+    const res = await api.get("/stats/hourly");
     return res.data;
   },
 );
 
-export const fetchTotalCount = createAsyncThunk(
-  "stats/fetchTotal",
+// Административные thunk'и
+export const fetchAdminDailyStats = createAsyncThunk(
+  "stats/fetchAdminDaily",
+  async (days: number) => {
+    const res = await api.get(`/admin/stats/daily?days=${days}`);
+    return res.data;
+  },
+);
+
+export const fetchAdminHourlyStats = createAsyncThunk(
+  "stats/fetchAdminHourly",
   async () => {
-    const res = await api.get("/stats/total");
-    return res.data.total;
+    const res = await api.get("/admin/stats/hourly");
+    return res.data;
   },
 );
 
@@ -48,8 +60,10 @@ const statsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Пользовательская статистика
       .addCase(fetchDailyStats.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchDailyStats.fulfilled, (state, action) => {
         state.loading = false;
@@ -57,7 +71,7 @@ const statsSlice = createSlice({
       })
       .addCase(fetchDailyStats.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Ошибка загрузки статистики";
+        state.error = action.error.message || "Ошибка загрузки";
       })
       .addCase(fetchHourlyStats.pending, (state) => {
         state.loading = true;
@@ -68,11 +82,30 @@ const statsSlice = createSlice({
       })
       .addCase(fetchHourlyStats.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.error.message || "Ошибка загрузки почасовой статистики";
+        state.error = action.error.message || "Ошибка загрузки";
       })
-      .addCase(fetchTotalCount.fulfilled, (state, action) => {
-        state.total = action.payload;
+      // Административная статистика
+      .addCase(fetchAdminDailyStats.pending, (state) => {
+        state.adminLoading = true;
+      })
+      .addCase(fetchAdminDailyStats.fulfilled, (state, action) => {
+        state.adminLoading = false;
+        state.adminDaily = action.payload;
+      })
+      .addCase(fetchAdminDailyStats.rejected, (state, action) => {
+        state.adminLoading = false;
+        state.error = action.error.message || "Ошибка загрузки";
+      })
+      .addCase(fetchAdminHourlyStats.pending, (state) => {
+        state.adminLoading = true;
+      })
+      .addCase(fetchAdminHourlyStats.fulfilled, (state, action) => {
+        state.adminLoading = false;
+        state.adminHourly = action.payload;
+      })
+      .addCase(fetchAdminHourlyStats.rejected, (state, action) => {
+        state.adminLoading = false;
+        state.error = action.error.message || "Ошибка загрузки";
       });
   },
 });

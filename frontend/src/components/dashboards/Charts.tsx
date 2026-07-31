@@ -3,7 +3,10 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   fetchDailyStats,
   fetchHourlyStats,
+  fetchAdminDailyStats,
+  fetchAdminHourlyStats,
 } from "../../store/slices/statsSlice";
+import LoadingSpinner from "../common/LoadingSpinner";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -26,63 +29,77 @@ ChartJS.register(
   Legend,
 );
 
-const Charts = () => {
+interface ChartsProps {
+  isAdmin?: boolean;
+}
+
+const Charts = ({ isAdmin = false }: ChartsProps) => {
   const dispatch = useAppDispatch();
-  const { daily, hourly, loading } = useAppSelector((state) => state.stats);
+  const { daily, hourly, adminDaily, adminHourly, loading, adminLoading } =
+    useAppSelector((state) => state.stats);
+
+  const isLoading = isAdmin ? adminLoading : loading;
+  const dailyData = isAdmin ? adminDaily : daily;
+  const hourlyData = isAdmin ? adminHourly : hourly;
 
   useEffect(() => {
-    dispatch(fetchDailyStats(7));
-    dispatch(fetchHourlyStats());
-  }, [dispatch]);
+    if (isAdmin) {
+      dispatch(fetchAdminDailyStats(7));
+      dispatch(fetchAdminHourlyStats());
+    } else {
+      dispatch(fetchDailyStats(7));
+      dispatch(fetchHourlyStats());
+    }
+  }, [dispatch, isAdmin]);
 
-  if (loading) return <div className="text-center">Загрузка графиков...</div>;
+  if (isLoading) return <LoadingSpinner />;
 
-  const dailyData = {
-    labels: daily.map((item) => {
-      // Используем поле day (которое приходит с сервера)
-      const dateStr = item.day; // fallback на случай другого названия
-      return new Date(dateStr).toLocaleDateString("ru-RU", {
-        day: "2-digit",
-        month: "2-digit",
-      });
-    }),
-    datasets: [
-      {
-        label: "Количество запросов",
-        data: daily.map((item) => item.count),
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        tension: 0.1,
-      },
-    ],
+  const chartData = (
+    data: { day?: string; hour?: number; count: number }[],
+    label: string,
+    dateKey: "day" | "hour",
+  ) => {
+    const labels = data.map((item) => {
+      if (dateKey === "day") {
+        const dateStr = item.day || "";
+        return new Date(dateStr).toLocaleDateString("ru-RU", {
+          day: "2-digit",
+          month: "2-digit",
+        });
+      } else {
+        return `${item.hour}:00`;
+      }
+    });
+    return {
+      labels,
+      datasets: [
+        {
+          label,
+          data: data.map((item) => item.count),
+          borderColor: "rgb(75, 192, 192)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          tension: 0.1,
+        },
+      ],
+    };
   };
 
-  const hourlyData = {
-    labels: hourly.map((item) => `${item.hour}:00`),
-    datasets: [
-      {
-        label: "Запросы по часам",
-        data: hourly.map((item) => item.count),
-        borderColor: "rgb(153, 102, 255)",
-        backgroundColor: "rgba(153, 102, 255, 0.2)",
-        tension: 0.1,
-      },
-    ],
-  };
+  const dailyChartData = chartData(dailyData, "Количество запросов", "day");
+  const hourlyChartData = chartData(hourlyData, "Запросы по часам", "hour");
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <div className="p-4 bg-white rounded shadow dark:bg-gray-800">
         <h3 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white">
-          Запросы за последние 7 дней
+          Запросы за последние 7 дней {isAdmin && "(все пользователи)"}
         </h3>
-        <Line data={dailyData} />
+        <Line data={dailyChartData} />
       </div>
       <div className="p-4 bg-white rounded shadow dark:bg-gray-800">
         <h3 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white">
-          Запросы по часам (сегодня)
+          Запросы по часам (сегодня) {isAdmin && "(все пользователи)"}
         </h3>
-        <Line data={hourlyData} />
+        <Line data={hourlyChartData} />
       </div>
     </div>
   );
