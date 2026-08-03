@@ -52,7 +52,7 @@ const NewTask = () => {
         </div>
       </form>
 
-      <div className="mt-4 p-4 border rounded bg-gray-50 dark:bg-gray-800 min-h-[80px]">
+      <div className="p-4 mt-4 border rounded bg-gray-50 dark:bg-gray-800 min-h-20">
         {loading && !cleaned ? (
           <LoadingSpinner />
         ) : cleaned ? (
