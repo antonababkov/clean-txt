@@ -1,6 +1,7 @@
 import CleaningTask from "../models/CleaningTask.js";
 import { cleanTextWithCache } from "../services/textCleaner.js";
 import { ValidationError, NotFoundError } from "../utils/errors.js";
+import pool from "../config/db.js";
 
 export const createTask = async (req, res, next) => {
   try {
@@ -72,13 +73,41 @@ export const deleteTask = async (req, res, next) => {
   }
 };
 
-// Админский эндпоинт
-export const adminGetAllTasks = async (req, res, next) => {
+export const adminDeleteTask = async (req, res, next) => {
   try {
+    const taskId = req.params.id;
+    //Проверяем, что задача существует (админ может удалять любую)
+    const result = await pool.query(
+      "DELETE FROM cleaning_tasks WHERE id = $1 RETURNING id",
+      [taskId],
+    );
+    if (result.rowCount === 0) {
+      throw new NotFoundError("Задание не найдено");
+    }
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};
+export const adminGetTasks = async (req, res, next) => {
+  try {
+    const userId = req.query.userId || null;
+    const days = req.query.days || null;
     const limit = parseInt(req.query.limit) || 10;
     const offset = parseInt(req.query.offset) || 0;
-    const { tasks, total } = await CleaningTask.findAll({ limit, offset });
-    res.json({ tasks, total, limit, offset });
+
+    const result = await CleaningTask.adminGetTasks({
+      userId,
+      days,
+      limit,
+      offset,
+    });
+    res.json({
+      tasks: result.tasks,
+      total: result.total,
+      limit,
+      offset,
+    });
   } catch (err) {
     next(err);
   }

@@ -6,7 +6,8 @@ import {
   getTaskById,
   updateTask,
   deleteTask,
-  adminGetAllTasks,
+  adminGetTasks,
+  adminDeleteTask,
 } from "../controllers/taskController.js";
 
 const router = express.Router();
@@ -20,7 +21,8 @@ router.get("/tasks/:id", getTaskById);
 router.put("/tasks/:id", updateTask);
 router.delete("/tasks/:id", deleteTask);
 
-// Админский маршрут
-router.get("/admin/tasks", isAdmin, adminGetAllTasks);
+// Админские маршруты
+router.get("/admin/tasks", isAdmin, adminGetTasks);
+router.delete("/admin/tasks/:id", isAdmin, adminDeleteTask);
 
 export default router;

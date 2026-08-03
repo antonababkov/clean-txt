@@ -23,6 +23,13 @@ class User {
     );
     return result.rows[0];
   }
+
+  static async getAllUsers() {
+    const result = await pool.query(
+      "SELECT id, email, role FROM users ORDER BY email",
+    );
+    return result.rows;
+  }
 }
 
 export default User;
