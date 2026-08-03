@@ -2,6 +2,7 @@ import CleaningTask from "../models/CleaningTask.js";
 import { cleanTextWithCache } from "../services/textCleaner.js";
 import { ValidationError, NotFoundError } from "../utils/errors.js";
 import pool from "../config/db.js";
+import { notifyUser } from "../websocket.js";
 
 export const createTask = async (req, res, next) => {
   try {
@@ -14,6 +15,16 @@ export const createTask = async (req, res, next) => {
       userId: req.user.userId,
       originalText,
       cleanedText,
+    });
+    // Отправляем уведомление создателю задачи
+    notifyUser(req.user.userId, {
+      type: "TASK_CREATED",
+      task: {
+        id: task.id,
+        original_text: task.original_text,
+        cleaned_text: task.cleaned_text,
+        created_at: task.created_at,
+      },
     });
     res.status(201).json(task);
   } catch (err) {
