@@ -7,49 +7,85 @@ export const initWebSocket = (server) => {
   wss = new WebSocketServer({ server });
 
   wss.on("connection", (ws, req) => {
-    // Получаем токен из query-параметра (или из заголовка)
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const token = url.searchParams.get("token");
-    if (!token) {
-      ws.close(1008, "Token required");
-      return;
-    }
-    const decoded = verifyToken(token);
-    if (!decoded) {
-      ws.close(1008, "Invalid token");
-      return;
-    }
-    ws.userId = decoded.userId;
+    console.log("WebSocket connection established, waiting for token");
+
+    let authenticated = false;
 
     ws.on("message", (message) => {
-      // Обработка сообщений от клиента (опционально)
-      console.log("Received:", message.toString());
+      try {
+        const data = JSON.parse(message.toString());
+        if (data.type === "auth" && data.token) {
+          const decoded = verifyToken(data.token);
+          if (decoded) {
+            ws.userId = decoded.userId;
+            authenticated = true;
+            console.log(`User ${ws.userId} authenticated`);
+            ws.send(JSON.stringify({ type: "auth_success" }));
+            // Удаляем этот обработчик и заменяем на обычный
+            ws.removeAllListeners("message");
+            ws.on("message", (msg) => {
+              console.log("Message from user", ws.userId, ":", msg.toString());
+            });
+            return;
+          } else {
+            ws.send(
+              JSON.stringify({ type: "auth_failed", message: "Invalid token" }),
+            );
+            ws.close(1008, "Invalid token");
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Error parsing message:", e);
+      }
+      // Если не авторизован, закрываем
+      if (!authenticated) {
+        ws.send(
+          JSON.stringify({
+            type: "auth_required",
+            message: "Please send token",
+          }),
+        );
+        ws.close(1008, "Authentication required");
+      }
     });
 
     ws.on("close", () => {
-      console.log(`Client ${ws.userId} disconnected`);
+      console.log("WebSocket disconnected");
     });
+
+    ws.on("error", (err) => {
+      console.error("WebSocket client error:", err);
+    });
+  });
+
+  wss.on("error", (err) => {
+    console.error("WebSocket server error:", err);
   });
 
   return wss;
 };
 
-// Функция для отправки уведомления конкретному пользователю
 export const notifyUser = (userId, data) => {
   if (!wss) return;
+  let count = 0;
   wss.clients.forEach((client) => {
     if (client.userId === userId && client.readyState === 1) {
       client.send(JSON.stringify(data));
+      count++;
     }
   });
+  console.log(`Notified ${count} client(s) for user ${userId}`);
 };
 
-// Функция для широковещательной рассылки (например, админам)
 export const broadcast = (data) => {
   if (!wss) return;
+  let count = 0;
   wss.clients.forEach((client) => {
     if (client.readyState === 1) {
       client.send(JSON.stringify(data));
+      count++;
     }
   });
+  console.log(`Broadcast to ${count} client(s)`);
 };
