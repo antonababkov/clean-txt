@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-/* import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { fetchMe } from "./store/slices/authSlice"; */
+import { useWebSocket } from "./hooks/useWebSocket";
+import { useAppSelector } from "./store/hooks";
+import { Toaster, toast } from "react-hot-toast";
 
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
@@ -19,6 +20,20 @@ import AdminRoute from "./components/admin/AdminRoute";
 import AdminPanel from "./pages/AdminPanel";
 
 function App() {
+  const token = useAppSelector((state) => state.auth.accessToken);
+  const wsUrl = import.meta.env.VITE_WS_URL;
+
+  const { messages } = useWebSocket(wsUrl, token);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      const last = messages[messages.length - 1];
+      if (last.type === "TASK_CREATED") {
+        toast.success(`Новая задача очищена! ID: ${last.task.id}`);
+      }
+    }
+  }, [messages]);
+
   useEffect(() => {
     const theme = localStorage.getItem("theme") || "light";
     document.documentElement.className = theme;
@@ -26,6 +41,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Toaster position="top-right" />
       <div className="min-h-screen text-gray-900 transition-colors duration-300 bg-neutral-100 dark:bg-gray-900 dark:text-gray-100">
         <AuthLoader>
           <Navbar />
