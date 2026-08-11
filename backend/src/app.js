@@ -6,7 +6,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import { Pool } from "pg";
 import pool from "./config/db.js";
-import { setupSwagger } from "./swagger.js";
+//import { setupSwagger } from "./swagger.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
@@ -27,7 +27,10 @@ dotenv.config();
 
 const app = express();
 
-setupSwagger(app);
+if (process.env.NODE_ENV !== "test") {
+  const { setupSwagger } = await import("./swagger.js");
+  setupSwagger(app);
+}
 
 app.use(helmet());
 app.use(

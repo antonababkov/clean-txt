@@ -24,7 +24,7 @@ describe("Tasks API", () => {
   };
 
   beforeAll(async () => {
-    // 1. Создаём обычного пользователя через API
+    // 1. Создаём обычного пользователя через API (для получения токена)
     const userRes = await request(app).post("/auth/register").send(testUser);
     userToken = userRes.body.accessToken;
 
@@ -37,7 +37,7 @@ describe("Tasks API", () => {
       [adminUser.email, hashedAdminPassword],
     );
 
-    // Получаем токен для админа через логин
+    // Получаем токен для админа через логин (теперь роль уже admin)
     const adminLogin = await request(app)
       .post("/auth/login")
       .send({ email: adminUser.email, password: adminUser.password });
@@ -78,7 +78,11 @@ describe("Tasks API", () => {
       testUser.email,
       adminUser.email,
     ]);
-    await pool.end();
+    try {
+      await pool.end();
+    } catch (e) {
+      // игнорируем, если пул уже закрыт
+    }
   });
 
   describe("POST /tasks", () => {
@@ -147,11 +151,13 @@ describe("Tasks API", () => {
     });
 
     it("не должен позволять получить задание другого пользователя", async () => {
+      // Создаём задание от админа
       const adminTask = await request(app)
         .post("/tasks")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ originalText: "Admin task" });
 
+      // Пытаемся получить его от обычного пользователя
       await request(app)
         .get(`/tasks/${adminTask.body.id}`)
         .set("Authorization", `Bearer ${userToken}`)
@@ -213,6 +219,7 @@ describe("Tasks API", () => {
         .set("Authorization", `Bearer ${userToken}`)
         .expect(204);
 
+      // Проверяем, что задания нет
       await request(app)
         .get(`/tasks/${newTask.body.id}`)
         .set("Authorization", `Bearer ${userToken}`)
@@ -268,6 +275,48 @@ describe("Tasks API", () => {
 
     it("должен вернуть 401 без токена", async () => {
       await request(app).get("/admin/tasks").expect(401);
+    });
+
+    // ===== НОВЫЙ ТЕСТ ДЛЯ DELETE /admin/tasks/:id =====
+    describe("DELETE /admin/tasks/:id", () => {
+      it("должен позволять админу удалить любую задачу", async () => {
+        // Создаём задачу от обычного пользователя
+        const userTask = await request(app)
+          .post("/tasks")
+          .set("Authorization", `Bearer ${userToken}`)
+          .send({ originalText: "Task for admin delete" });
+
+        // Админ удаляет
+        await request(app)
+          .delete(`/admin/tasks/${userTask.body.id}`)
+          .set("Authorization", `Bearer ${adminToken}`)
+          .expect(204);
+
+        // Проверяем, что задача действительно удалена
+        await request(app)
+          .get(`/tasks/${userTask.body.id}`)
+          .set("Authorization", `Bearer ${userToken}`)
+          .expect(404);
+      });
+
+      it("должен вернуть 403 для обычного пользователя", async () => {
+        const task = await request(app)
+          .post("/tasks")
+          .set("Authorization", `Bearer ${userToken}`)
+          .send({ originalText: "test" });
+
+        await request(app)
+          .delete(`/admin/tasks/${task.body.id}`)
+          .set("Authorization", `Bearer ${userToken}`)
+          .expect(403);
+      });
+
+      it("должен вернуть 404, если задача не найдена", async () => {
+        await request(app)
+          .delete("/admin/tasks/99999")
+          .set("Authorization", `Bearer ${adminToken}`)
+          .expect(404);
+      });
     });
   });
 });

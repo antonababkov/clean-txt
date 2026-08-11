@@ -9,9 +9,8 @@ const PORT = process.env.PORT || 5000;
 const httpServer = createServer(app);
 const wss = initWebSocket(httpServer);
 
-httpServer.listen(PORT, () => {
-  console.log(
-    `🚀 Сервер запущен на порту ${PORT} в режиме ${process.env.NODE_ENV}`,
-  );
-  console.log(`🔌 WebSocket server активен`);
-});
+if (process.env.NODE_ENV !== "test") {
+  httpServer.listen(PORT, () => {
+    console.log(`🚀 Сервер запущен на порту ${PORT}`);
+  });
+}
