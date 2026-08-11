@@ -6,6 +6,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import { Pool } from "pg";
 import pool from "./config/db.js";
+import { setupSwagger } from "./swagger.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
@@ -25,6 +26,9 @@ const allowedOrigins = [
 dotenv.config();
 
 const app = express();
+
+setupSwagger(app);
+
 app.use(helmet());
 app.use(
   cors({
