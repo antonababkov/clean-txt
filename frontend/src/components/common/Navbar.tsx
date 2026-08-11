@@ -11,8 +11,8 @@ const Navbar = () => {
   const handleLogout = () => dispatch(logout());
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center">
-      <Link to="/" className="font-bold text-xl text-gray-800 dark:text-white">
+    <nav className="flex items-center justify-between p-4 bg-white shadow-md dark:bg-gray-800">
+      <Link to="/" className="text-xl font-bold text-gray-800 dark:text-white">
         CleanText
       </Link>
       <div className="flex items-center space-x-4">
@@ -47,7 +47,7 @@ const Navbar = () => {
             <ThemeToggle />
             <button
               onClick={handleLogout}
-              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+              className="px-3 py-1 text-white bg-red-500 rounded cursor-pointer hover:bg-red-600"
             >
               Выйти
             </button>
