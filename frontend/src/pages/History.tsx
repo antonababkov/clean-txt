@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchTasks } from "../store/slices/taskSlice";
+import api from "../api/axiosConfig";
 
 const History = () => {
   const dispatch = useAppDispatch();
@@ -12,9 +13,32 @@ const History = () => {
     dispatch(fetchTasks({ limit, offset: page * limit }));
   }, [dispatch, page]);
 
+  const handleExport = async () => {
+    try {
+      const response = await api.get("/export/tasks", {
+        responseType: "blob",
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "tasks_export.csv");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Export error", error);
+    }
+  };
+
   return (
     <div>
       <h2 className="mb-4 text-2xl font-bold">История очистки</h2>
+      <button
+        onClick={handleExport}
+        className="px-4 py-2 mb-4 text-white bg-green-500 rounded cursor-pointer hover:bg-green-600"
+      >
+        Экспорт истории в CSV
+      </button>
       {loading && <p>Загрузка...</p>}
       <div className="space-y-4">
         {tasks.map((task) => (
