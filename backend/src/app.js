@@ -6,11 +6,14 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import { Pool } from "pg";
 import pool from "./config/db.js";
+//import { setupSwagger } from "./swagger.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import exportRoutes from "./routes/exportRoutes.js";
+
 import { errorHandler } from "./middleware/errorHandler.js";
 
 // Список разрешённых origin (для разработки и продакшена)
@@ -23,6 +26,12 @@ const allowedOrigins = [
 dotenv.config();
 
 const app = express();
+
+if (process.env.NODE_ENV !== "test") {
+  const { setupSwagger } = await import("./swagger.js");
+  setupSwagger(app);
+}
+
 app.use(helmet());
 app.use(
   cors({
@@ -71,6 +80,7 @@ app.use("/auth", authRoutes);
 app.use("/", taskRoutes);
 app.use("/", statsRoutes);
 app.use("/", userRoutes);
+app.use("/", exportRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
