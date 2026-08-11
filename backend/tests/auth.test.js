@@ -11,7 +11,9 @@ describe("Auth Endpoints", () => {
   // Удаляем пользователя после всех тестов (чистота)
   afterAll(async () => {
     await pool.query("DELETE FROM users WHERE email = $1", [testUser.email]);
-    await pool.end();
+    try {
+      await pool.end();
+    } catch (e) {}
   });
 
   describe("POST /auth/register", () => {
