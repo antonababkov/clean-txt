@@ -4,11 +4,18 @@ import { ValidationError, NotFoundError } from "../utils/errors.js";
 import pool from "../config/db.js";
 import { notifyUser } from "../websocket.js";
 
+const MAX_TEXT_LENGTH = 5000;
+
 export const createTask = async (req, res, next) => {
   try {
     const { originalText } = req.body;
     if (!originalText || typeof originalText !== "string") {
       throw new ValidationError("Текст обязателен");
+    }
+    if (originalText.length > MAX_TEXT_LENGTH) {
+      throw new ValidationError(
+        `Текст не должен превышать ${MAX_TEXT_LENGTH} символов`,
+      );
     }
     const cleanedText = await cleanTextWithCache(originalText);
     const task = await CleaningTask.create({
@@ -61,6 +68,11 @@ export const updateTask = async (req, res, next) => {
     const { originalText } = req.body;
     if (!originalText || typeof originalText !== "string") {
       throw new ValidationError("Текст обязателен");
+    }
+    if (originalText.length > MAX_TEXT_LENGTH) {
+      throw new ValidationError(
+        `Текст не должен превышать ${MAX_TEXT_LENGTH} символов`,
+      );
     }
     const cleanedText = await cleanTextWithCache(originalText);
     const task = await CleaningTask.update(req.params.id, req.user.userId, {

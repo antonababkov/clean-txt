@@ -58,11 +58,11 @@ const History = () => {
       <div className="space-y-4">
         {tasks.map((task) => (
           <div key={task.id} className="p-3 border rounded">
-            <p>
+            <p className="break-all">
               <strong>Исходный:</strong> {task.original_text.substring(0, 100)}
               ...
             </p>
-            <p>
+            <p className="break-all">
               <strong>Очищенный:</strong> {task.cleaned_text}
             </p>
             <p className="text-sm text-gray-500">
