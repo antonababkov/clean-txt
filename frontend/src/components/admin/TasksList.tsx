@@ -101,10 +101,14 @@ const TasksList = () => {
       {/* Фильтры */}
       <div className="flex flex-wrap items-end gap-4 mb-4">
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label
+            htmlFor="tasksList_email"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
             Пользователь (email)
           </label>
           <input
+            id="tasksList_email"
             ref={inputRef}
             type="text"
             value={emailInput}
@@ -112,7 +116,7 @@ const TasksList = () => {
             onFocus={handleFocus}
             onBlur={handleBlur}
             placeholder="Введите email для поиска..."
-            className="block w-64 px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm dark:border-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+            className="block w-64 px-3 py-2 mt-1 text-gray-800 border border-gray-300 rounded-md shadow-sm dark:text-gray-300 dark:border-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800"
           />
           {showSuggestions && (
             <ul className="absolute z-10 w-full mt-1 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-700 max-h-60">
@@ -133,10 +137,14 @@ const TasksList = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label
+            htmlFor="tasksList_days"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
             Период (дней)
           </label>
           <select
+            id="tasksList_days"
             name="days"
             value={filters.days}
             onChange={handleFilterChange}

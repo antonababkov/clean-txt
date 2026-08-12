@@ -71,7 +71,7 @@ const History = () => {
           </div>
         ))}
       </div>
-      <div className="flex justify-between mt-4">
+      <div className="flex justify-between mt-4 ">
         <button
           onClick={() => setPage((p) => Math.max(0, p - 1))}
           disabled={page === 0}

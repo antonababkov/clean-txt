@@ -32,23 +32,23 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-md p-6 mx-auto mt-10 border rounded shadow">
+    <div className="p-6 mx-auto mt-10 border rounded shadow max-w-80 sm:max-w-md">
       <h2 className="mb-4 text-2xl font-bold">Регистрация</h2>
       <form onSubmit={handleSubmit}>
         <input
           className="w-full p-2 mb-2 text-gray-800 border dark:text-gray-300"
           type="email"
-          name="email"
+          id="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          autoComplete="true"
+          autoComplete="off"
           required
         />
         <input
           className="w-full p-2 mb-2 text-gray-800 border dark:text-gray-300"
           type="password"
-          name="password"
+          id="password"
           placeholder="Пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -57,7 +57,7 @@ const Register = () => {
         <input
           className="w-full p-2 mb-2 text-gray-800 border dark:text-gray-300"
           type="password"
-          name="password-repeat"
+          id="password-repeat"
           placeholder="Повторите пароль"
           value={checkpassword}
           onChange={(e) => setCheckpassword(e.target.value)}

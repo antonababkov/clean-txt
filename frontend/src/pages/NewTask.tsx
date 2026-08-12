@@ -24,11 +24,12 @@ const NewTask = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="mx-auto max-w-80 sm:max-w-2xl">
       <h2 className="mb-4 text-2xl font-bold">Очистка текста</h2>
       <form onSubmit={handleSubmit}>
         <textarea
-          className="w-full p-2 mb-2 border rounded"
+          id="newTask_input"
+          className="w-full p-2 mb-2 text-gray-800 border rounded dark:text-gray-300"
           rows={6}
           placeholder="Введите текст с HTML или лишними пробелами..."
           value={text}
