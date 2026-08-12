@@ -101,10 +101,14 @@ const TasksList = () => {
       {/* Фильтры */}
       <div className="flex flex-wrap items-end gap-4 mb-4">
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label
+            htmlFor="tasksList_email"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
             Пользователь (email)
           </label>
           <input
+            id="tasksList_email"
             ref={inputRef}
             type="text"
             value={emailInput}
@@ -133,10 +137,14 @@ const TasksList = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label
+            htmlFor="tasksList_days"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
             Период (дней)
           </label>
           <select
+            id="tasksList_days"
             name="days"
             value={filters.days}
             onChange={handleFilterChange}

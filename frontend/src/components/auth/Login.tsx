@@ -32,16 +32,17 @@ const Login = () => {
         <input
           className="w-full p-2 mb-2 text-gray-800 border dark:text-gray-300"
           type="email"
-          name="email"
+          id="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          autoComplete="on"
           required
         />
         <input
           className="w-full p-2 mb-2 text-gray-800 border dark:text-gray-300 "
           type="password"
-          name="password"
+          id="password"
           placeholder="Пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}

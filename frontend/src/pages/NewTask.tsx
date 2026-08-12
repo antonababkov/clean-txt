@@ -28,6 +28,7 @@ const NewTask = () => {
       <h2 className="mb-4 text-2xl font-bold">Очистка текста</h2>
       <form onSubmit={handleSubmit}>
         <textarea
+          id="newTask_input"
           className="w-full p-2 mb-2 text-gray-800 border rounded dark:text-gray-300"
           rows={6}
           placeholder="Введите текст с HTML или лишними пробелами..."
