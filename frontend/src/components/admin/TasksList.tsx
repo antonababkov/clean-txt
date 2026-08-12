@@ -112,7 +112,7 @@ const TasksList = () => {
             onFocus={handleFocus}
             onBlur={handleBlur}
             placeholder="Введите email для поиска..."
-            className="block w-64 px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm dark:border-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+            className="block w-64 px-3 py-2 mt-1 text-gray-800 border border-gray-300 rounded-md shadow-sm dark:text-gray-300 dark:border-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800"
           />
           {showSuggestions && (
             <ul className="absolute z-10 w-full mt-1 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-700 max-h-60">

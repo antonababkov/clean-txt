@@ -65,7 +65,7 @@ const Navbar = () => {
         </Link>
 
         {/* Десктопное меню */}
-        <div className="items-center hidden space-x-6 sm:flex">
+        <div className="items-center hidden space-x-6 md:flex">
           {token ? (
             <>
               {authLinks}
@@ -96,7 +96,7 @@ const Navbar = () => {
         </div>
 
         {/* Гамбургер-иконка (только на мобильных) */}
-        <div className="flex items-center sm:hidden">
+        <div className="flex items-center md:hidden">
           <ThemeToggle />
           <button
             onClick={toggleMenu}
@@ -132,7 +132,7 @@ const Navbar = () => {
 
       {/* Мобильное меню (выпадающее) */}
       <div
-        className={`sm:hidden transition-all duration-300 overflow-hidden ${
+        className={`md:hidden transition-all duration-300 overflow-hidden ${
           isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >

@@ -45,7 +45,7 @@ function App() {
       <div className="min-h-screen text-gray-900 transition-colors duration-300 bg-neutral-100 dark:bg-gray-900 dark:text-gray-100">
         <AuthLoader>
           <Navbar />
-          <div className="container mx-auto mt-4">
+          <div className="container px-2 pb-4 mx-auto mt-4">
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
