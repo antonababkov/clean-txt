@@ -1,1 +1,1 @@
-# /api-docs/ - swagger UI
+/api-docs/ - swagger UI
