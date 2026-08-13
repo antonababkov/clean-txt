@@ -5,6 +5,7 @@ import {
   fetchUsers,
   deleteTask,
 } from "../../store/slices/adminSlice";
+import ConfirmDialog from "../common/ConfirmDialog";
 
 const TasksList = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +19,10 @@ const TasksList = () => {
     { id: number; email: string; role: string }[]
   >([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    taskId: number | null;
+  }>({ isOpen: false, taskId: null });
   const inputRef = useRef<HTMLInputElement>(null);
   const limit = 10;
 
@@ -72,10 +77,19 @@ const TasksList = () => {
     setPage(0);
   };
 
-  const handleDelete = (id: number) => {
-    if (window.confirm("Удалить задание?")) {
-      dispatch(deleteTask(id));
+  const handleDeleteClick = (id: number) => {
+    setConfirmDialog({ isOpen: true, taskId: id });
+  };
+
+  const handleConfirmDelete = () => {
+    if (confirmDialog.taskId !== null) {
+      dispatch(deleteTask(confirmDialog.taskId));
     }
+    setConfirmDialog({ isOpen: false, taskId: null });
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmDialog({ isOpen: false, taskId: null });
   };
 
   const handleFocus = () => {
@@ -210,7 +224,7 @@ const TasksList = () => {
                 </td>
                 <td className="px-6 py-4 text-sm whitespace-nowrap">
                   <button
-                    onClick={() => handleDelete(task.id)}
+                    onClick={() => handleDeleteClick(task.id)}
                     className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
                   >
                     Удалить
@@ -242,6 +256,15 @@ const TasksList = () => {
           Вперёд
         </button>
       </div>
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title="Удаление задания"
+        message="Вы уверены, что хотите удалить это задание? Это действие необратимо."
+        confirmText="Удалить"
+        cancelText="Отмена"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };
