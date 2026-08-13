@@ -10,6 +10,7 @@ build/
 *.pid
 myData.txt
 *.tsbuildinfo
+stats.html
 
 # IDE
 .vscode/
