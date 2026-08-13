@@ -9,6 +9,7 @@ build/
 .DS_Store
 *.pid
 myData.txt
+*.tsbuildinfo
 
 # IDE
 .vscode/
