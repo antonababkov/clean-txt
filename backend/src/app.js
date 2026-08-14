@@ -19,6 +19,7 @@ import { errorHandler } from "./middleware/errorHandler.js";
 // Список разрешённых origin (для разработки и продакшена)
 const allowedOrigins = [
   "http://localhost:5173", // Vite по умолчанию
+  "http://localhost:4173", // для preview-сборки
   "http://localhost:3000", // возможный порт
   "https://ваш-домен.ру", // для продакшена
 ];
