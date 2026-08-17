@@ -189,9 +189,15 @@ GitHub Actions автоматически:
 Деплоит на VPS через SSH.
 
 Для работы CI/CD добавьте секреты в настройках репозитория:
+
 Секрет - Описание
+
 DOCKER_USERNAME - Логин Docker Hub
+
 DOCKER_PASSWORD - Пароль или токен Docker Hub
+
 SERVER_HOST - IP VPS сервера
+
 SERVER_USER - Имя пользователя SSH
+
 SSH_PRIVATE_KEY - Приватный SSH-ключ
