@@ -36,31 +36,33 @@
 
 ## Структура проекта
 
+````plaintext
 clean-txt/
 ├── backend/
-│ ├── src/
-│ │ ├── config/ # Конфигурации (БД, Redis, Swagger)
-│ │ ├── controllers/ # Контроллеры
-│ │ ├── middleware/ # Middleware (auth, errorHandler)
-│ │ ├── models/ # Модели данных (pg)
-│ │ ├── routes/ # Маршруты
-│ │ ├── services/ # Бизнес-логика
-│ │ ├── utils/ # Вспомогательные функции
-│ │ └── app.js # Express приложение
-│ ├── tests/ # Интеграционные тесты
-│ ├── Dockerfile # Продакшен-образ
-│ ├── Dockerfile.dev # Образ для разработки
-│ └── package.json
+│   ├── src/
+│   │   ├── config/          # Конфигурации (БД, Redis, Swagger)
+│   │   ├── controllers/     # Контроллеры
+│   │   ├── middleware/      # Middleware (auth, errorHandler)
+│   │   ├── models/          # Модели данных (pg)
+│   │   ├── routes/          # Маршруты
+│   │   ├── services/        # Бизнес-логика
+│   │   ├── utils/           # Вспомогательные функции
+│   │   └── app.js           # Express приложение
+│   ├── tests/               # Интеграционные тесты
+│   ├── Dockerfile           # Продакшен-образ
+│   ├── Dockerfile.dev       # Образ для разработки
+│   └── package.json
 ├── frontend/
-│ ├── src/ # React-приложение
-│ ├── Dockerfile # Продакшен-образ (с Nginx)
-│ ├── Dockerfile.dev # Образ для разработки
-│ └── package.json
-├── docker-compose.yml # (опционально) общий compose
-├── docker-compose.dev.yml # Для локальной разработки
-├── docker-compose.prod.yml # Для продакшена
-├── .env # Переменные окружения (не коммитится)
+│   ├── src/                 # React-приложение
+│   ├── Dockerfile           # Продакшен-образ (с Nginx)
+│   ├── Dockerfile.dev       # Образ для разработки
+│   └── package.json
+├── docker-compose.yml       # (опционально) общий compose
+├── docker-compose.dev.yml   # Для локальной разработки
+├── docker-compose.prod.yml  # Для продакшена
+├── .env                     # Переменные окружения (не коммитится)
 └── README.md
+```
 
 ---
 
@@ -72,7 +74,8 @@ clean-txt/
    ```bash
    git clone https://github.com/your-username/clean-txt.git
    cd clean-txt
-   ```
+````
+
 2. Установите зависимости для бэкенда и фронтенда:
    cd backend && npm install
    cd ../frontend && npm install
@@ -143,18 +146,31 @@ http://localhost:5000/api-docs
 Метод - Путь - Описание
 
 POST - /auth/register - Регистрация
+
 POST - /auth/login - Вход
+
 POST - /auth/refresh - Обновление access токена
+
 POST - /auth/logout - Выход
+
 GET - /auth/me - Профиль пользователя
+
 POST - /tasks - Создать задачу на очистку
+
 GET - /tasks - Список задач пользователя
+
 PUT - /tasks/:id - Обновить задачу
+
 DELETE - /tasks/:id - Удалить задачу
+
 GET - /stats/daily - Статистика по дням (своя)
+
 GET - /stats/hourly - Статистика по часам (своя)
+
 GET - /admin/tasks - Все задачи (админ)
+
 GET - /admin/users - Все пользователи (админ)
+
 GET - /export/tasks - Экспорт задач в CSV
 
 ## Тестирование
