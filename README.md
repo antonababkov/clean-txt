@@ -72,7 +72,7 @@ clean-txt/
 
 1. Клонируйте репозиторий:
  ```bash
-   git clone https://github.com/your-username/clean-txt.git
+   git clone https://github.com/antonababkov/clean-txt.git
    cd clean-txt
 ```
 
