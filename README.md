@@ -129,17 +129,14 @@ clean-txt/
 
 PORT=5000
 NODE_ENV=development
-
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=your_db_password
 DB_NAME=clean_text_db
-
 JWT_SECRET=your_super_secret_key
 ACCESS_TOKEN_EXPIRES=15m
 REFRESH_TOKEN_EXPIRES=7d
-
 REDIS_HOST=localhost
 REDIS_PORT=6379
 
@@ -158,7 +155,7 @@ JWT_SECRET=your_super_secret_key
 После запуска бэкенда документация Swagger доступна по адресу:
 http://localhost:5000/api-docs
 
-Основные эндпоинты:
+## Основные эндпоинты:
 
 Метод - Путь - Описание
 
