@@ -77,22 +77,22 @@ clean-txt/
 ```
 
 2. Установите зависимости для бэкенда и фронтенда:
-3. ```bash
+```bash
    cd backend
    npm install
    cd ../frontend
    npm install
-   ```
+```
 
-4. Создайте файлы .env в папках backend и frontend
-5. Убедитесь, что PostgreSQL и Redis запущены локально.
-6. Запустите бэкенд:
+3. Создайте файлы .env в папках backend и frontend
+4. Убедитесь, что PostgreSQL и Redis запущены локально.
+5. Запустите бэкенд:
    cd backend
    npm run dev
-7. Запустите фронтенд:
+6. Запустите фронтенд:
    cd frontend
    npm run dev
-8. Откройте http://localhost:5173
+7. Откройте http://localhost:5173
 
 ### Запуск с Docker (разработка)
 
@@ -102,10 +102,18 @@ clean-txt/
    cd clean-txt
 ```
 2. Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET).
-3. Запустите контейнеры:
+3. Создайте файлы .env в папках backend и frontend
+4. Установите зависимости для бэкенда и фронтенда:
+```bash
+   cd backend
+   npm install
+   cd ../frontend
+   npm install
+```
+5. Запустите контейнеры:
    docker-compose -f docker-compose.dev.yml up -d
-4. Фронтенд доступен на http://localhost:5173, бэкенд – на http://localhost:5000.
-5. Для остановки:
+6. Фронтенд доступен на http://localhost:5173, бэкенд – на http://localhost:5000.
+7. Для остановки:
    docker-compose -f docker-compose.dev.yml down
 
 ### Запуск с Docker (продакшен)
