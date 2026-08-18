@@ -58,11 +58,11 @@ const History = () => {
       <div className="space-y-4">
         {tasks.map((task) => (
           <div key={task.id} className="p-3 border rounded">
-            <p>
+            <p className="break-all">
               <strong>Исходный:</strong> {task.original_text.substring(0, 100)}
               ...
             </p>
-            <p>
+            <p className="break-all">
               <strong>Очищенный:</strong> {task.cleaned_text}
             </p>
             <p className="text-sm text-gray-500">
@@ -71,7 +71,7 @@ const History = () => {
           </div>
         ))}
       </div>
-      <div className="flex justify-between mt-4">
+      <div className="flex justify-between mt-4 ">
         <button
           onClick={() => setPage((p) => Math.max(0, p - 1))}
           disabled={page === 0}

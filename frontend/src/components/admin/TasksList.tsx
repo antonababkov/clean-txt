@@ -5,6 +5,7 @@ import {
   fetchUsers,
   deleteTask,
 } from "../../store/slices/adminSlice";
+import ConfirmDialog from "../common/ConfirmDialog";
 
 const TasksList = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +19,10 @@ const TasksList = () => {
     { id: number; email: string; role: string }[]
   >([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    taskId: number | null;
+  }>({ isOpen: false, taskId: null });
   const inputRef = useRef<HTMLInputElement>(null);
   const limit = 10;
 
@@ -72,10 +77,19 @@ const TasksList = () => {
     setPage(0);
   };
 
-  const handleDelete = (id: number) => {
-    if (window.confirm("Удалить задание?")) {
-      dispatch(deleteTask(id));
+  const handleDeleteClick = (id: number) => {
+    setConfirmDialog({ isOpen: true, taskId: id });
+  };
+
+  const handleConfirmDelete = () => {
+    if (confirmDialog.taskId !== null) {
+      dispatch(deleteTask(confirmDialog.taskId));
     }
+    setConfirmDialog({ isOpen: false, taskId: null });
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmDialog({ isOpen: false, taskId: null });
   };
 
   const handleFocus = () => {
@@ -101,10 +115,14 @@ const TasksList = () => {
       {/* Фильтры */}
       <div className="flex flex-wrap items-end gap-4 mb-4">
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label
+            htmlFor="tasksList_email"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
             Пользователь (email)
           </label>
           <input
+            id="tasksList_email"
             ref={inputRef}
             type="text"
             value={emailInput}
@@ -112,7 +130,7 @@ const TasksList = () => {
             onFocus={handleFocus}
             onBlur={handleBlur}
             placeholder="Введите email для поиска..."
-            className="block w-64 px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm dark:border-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+            className="block w-64 px-3 py-2 mt-1 text-gray-800 border border-gray-300 rounded-md shadow-sm dark:text-gray-300 dark:border-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800"
           />
           {showSuggestions && (
             <ul className="absolute z-10 w-full mt-1 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-700 max-h-60">
@@ -133,10 +151,14 @@ const TasksList = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label
+            htmlFor="tasksList_days"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
             Период (дней)
           </label>
           <select
+            id="tasksList_days"
             name="days"
             value={filters.days}
             onChange={handleFilterChange}
@@ -202,7 +224,7 @@ const TasksList = () => {
                 </td>
                 <td className="px-6 py-4 text-sm whitespace-nowrap">
                   <button
-                    onClick={() => handleDelete(task.id)}
+                    onClick={() => handleDeleteClick(task.id)}
                     className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
                   >
                     Удалить
@@ -234,6 +256,15 @@ const TasksList = () => {
           Вперёд
         </button>
       </div>
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title="Удаление задания"
+        message="Вы уверены, что хотите удалить это задание? Это действие необратимо."
+        confirmText="Удалить"
+        cancelText="Отмена"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };
