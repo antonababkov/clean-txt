@@ -68,7 +68,7 @@ clean-txt/
 
 ## Установка и запуск
 
-### Локальный запуск (без Docker)
+### Локальный запуск (без Docker) (не проверено)
 
 1. Клонируйте репозиторий:
  ```bash
@@ -98,7 +98,7 @@ clean-txt/
 ```
 7. Откройте http://localhost:5173
 
-### Запуск с Docker (разработка)
+### Запуск с Docker (разработка) (не проверено)
 
 1. Клонируйте репозиторий:
  ```bash
@@ -125,39 +125,46 @@ clean-txt/
 ```
    
 
-### Запуск с Docker (продакшен)
+### Запуск с Docker (продакшен) (не проверено)
 
 1. Соберите образы и запустите:
+```bash
    docker-compose -f docker-compose.prod.yml up -d
-2. Проверьте логи:
+```
+3. Проверьте логи:
+```bash
    docker-compose -f docker-compose.prod.yml logs -f
+```
 
 ## Переменные окружения
 
 ### Бэкенд (.env в папке backend)
-
-PORT=5000
-NODE_ENV=development
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=your_db_password
-DB_NAME=clean_text_db
-JWT_SECRET=your_super_secret_key
-ACCESS_TOKEN_EXPIRES=15m
-REFRESH_TOKEN_EXPIRES=7d
-REDIS_HOST=localhost
-REDIS_PORT=6379
+```plaintext
+   PORT=5000
+   NODE_ENV=development
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=postgres
+   DB_PASSWORD=your_db_password
+   DB_NAME=clean_text_db
+   JWT_SECRET=your_super_secret_key
+   ACCESS_TOKEN_EXPIRES=15m
+   REFRESH_TOKEN_EXPIRES=7d
+   REDIS_HOST=localhost
+   REDIS_PORT=6379
+```
 
 ### Фронтенд (.env в папке frontend)
-
-VITE_API_URL=http://localhost:5000
-VITE_WS_URL=ws://localhost:5000
+```plaintext
+   VITE_API_URL=http://localhost:5000
+   VITE_WS_URL=ws://localhost:5000
+```
 
 ### Корневой .env (для Docker)
-
-DB_PASSWORD=your_db_password
-JWT_SECRET=your_super_secret_key
+```plaintext
+   DB_PASSWORD=your_db_password
+   JWT_SECRET=your_super_secret_key
+```
 
 ## API документация
 
@@ -197,25 +204,26 @@ GET - /admin/users - Все пользователи (админ)
 GET - /export/tasks - Экспорт задач в CSV
 
 ## Тестирование
+```bash
+   cd backend
+   npm test
+```
 
-cd backend
-npm test
-
-## Деплой на VPS
+## Деплой на VPS (не проверено)
 
 1. Установите Docker и Docker Compose на сервере.
 2. Склонируйте репозиторий на сервер:
-
-git clone https://github.com/antonababkov/clean-txt.git /opt/clean-txt
-cd /opt/clean-txt
-
+```bash
+   git clone https://github.com/antonababkov/clean-txt.git /opt/clean-txt
+   cd /opt/clean-txt
+```
 3. Создайте файл .env с продакшен-параметрами.
 4. Запустите контейнеры:
    docker-compose -f docker-compose.prod.yml up -d
 5. Настройте Nginx на сервере для проксирования на порты 80 (фронтенд) и 5000 (бэкенд).
 6. Настройте SSL
 
-## CI/CD
+## CI/CD (не проверено)
 
 GitHub Actions автоматически:
 
