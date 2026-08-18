@@ -118,8 +118,8 @@ clean-txt/
 ```bash
    docker-compose -f docker-compose.dev.yml up -d
 ```
-7. Фронтенд доступен на http://localhost:5173, бэкенд – на http://localhost:5000.
-8. Для остановки:
+6. Фронтенд доступен на http://localhost:5173, бэкенд – на http://localhost:5000.
+7. Для остановки:
 ```bash
    docker-compose -f docker-compose.dev.yml down
 ```
@@ -131,7 +131,7 @@ clean-txt/
 ```bash
    docker-compose -f docker-compose.prod.yml up -d
 ```
-3. Проверьте логи:
+2. Проверьте логи:
 ```bash
    docker-compose -f docker-compose.prod.yml logs -f
 ```
