@@ -36,7 +36,7 @@
 
 ## Структура проекта
 
-````plaintext
+```plaintext
 clean-txt/
 ├── backend/
 │   ├── src/
@@ -62,7 +62,7 @@ clean-txt/
 ├── docker-compose.prod.yml  # Для продакшена
 ├── .env                     # Переменные окружения (не коммитится)
 └── README.md
-````
+```
 
 ---
 
@@ -87,11 +87,15 @@ clean-txt/
 3. Создайте файлы .env в папках backend и frontend
 4. Убедитесь, что PostgreSQL и Redis запущены локально.
 5. Запустите бэкенд:
+```bash
    cd backend
    npm run dev
+```
 6. Запустите фронтенд:
+```bash
    cd frontend
    npm run dev
+```
 7. Откройте http://localhost:5173
 
 ### Запуск с Docker (разработка)
@@ -111,10 +115,15 @@ clean-txt/
    npm install
 ```
 5. Запустите контейнеры:
+```bash
    docker-compose -f docker-compose.dev.yml up -d
-6. Фронтенд доступен на http://localhost:5173, бэкенд – на http://localhost:5000.
-7. Для остановки:
+```
+7. Фронтенд доступен на http://localhost:5173, бэкенд – на http://localhost:5000.
+8. Для остановки:
+```bash
    docker-compose -f docker-compose.dev.yml down
+```
+   
 
 ### Запуск с Docker (продакшен)
 
