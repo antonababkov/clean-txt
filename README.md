@@ -62,7 +62,7 @@ clean-txt/
 ├── docker-compose.prod.yml  # Для продакшена
 ├── .env                     # Переменные окружения (не коммитится)
 └── README.md
-```
+````
 
 ---
 
@@ -71,10 +71,10 @@ clean-txt/
 ### Локальный запуск (без Docker)
 
 1. Клонируйте репозиторий:
-   ```bash
+ ```bash
    git clone https://github.com/your-username/clean-txt.git
    cd clean-txt
-````
+```
 
 2. Установите зависимости для бэкенда и фронтенда:
    cd backend && npm install
