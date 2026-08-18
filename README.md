@@ -36,7 +36,7 @@
 
 ## Структура проекта
 
-````plaintext
+```plaintext
 clean-txt/
 ├── backend/
 │   ├── src/
@@ -62,13 +62,13 @@ clean-txt/
 ├── docker-compose.prod.yml  # Для продакшена
 ├── .env                     # Переменные окружения (не коммитится)
 └── README.md
-````
+```
 
 ---
 
 ## Установка и запуск
 
-### Локальный запуск (без Docker)
+### Локальный запуск (без Docker) (не проверено)
 
 1. Клонируйте репозиторий:
  ```bash
@@ -77,71 +77,101 @@ clean-txt/
 ```
 
 2. Установите зависимости для бэкенда и фронтенда:
-   cd backend && npm install
-   cd ../frontend && npm install
+```bash
+   cd backend
+   npm install
+   cd ../frontend
+   npm install
+```
 
 3. Создайте файлы .env в папках backend и frontend
 4. Убедитесь, что PostgreSQL и Redis запущены локально.
 5. Запустите бэкенд:
+```bash
    cd backend
    npm run dev
+```
 6. Запустите фронтенд:
+```bash
    cd frontend
    npm run dev
+```
 7. Откройте http://localhost:5173
 
-### Запуск с Docker (разработка)
+### Запуск с Docker (разработка) (не проверено)
 
-1. Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET).
-2. Запустите контейнеры:
+1. Клонируйте репозиторий:
+ ```bash
+   git clone https://github.com/antonababkov/clean-txt.git
+   cd clean-txt
+```
+2. Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET).
+3. Создайте файлы .env в папках backend и frontend
+4. Установите зависимости для бэкенда и фронтенда:
+```bash
+   cd backend
+   npm install
+   cd ../frontend
+   npm install
+```
+5. Запустите контейнеры:
+```bash
    docker-compose -f docker-compose.dev.yml up -d
-3. Фронтенд доступен на http://localhost:5173, бэкенд – на http://localhost:5000.
-4. Для остановки:
+```
+6. Фронтенд доступен на http://localhost:5173, бэкенд – на http://localhost:5000.
+7. Для остановки:
+```bash
    docker-compose -f docker-compose.dev.yml down
+```
+   
 
-### Запуск с Docker (продакшен)
+### Запуск с Docker (продакшен) (не проверено)
 
 1. Соберите образы и запустите:
+```bash
    docker-compose -f docker-compose.prod.yml up -d
+```
 2. Проверьте логи:
+```bash
    docker-compose -f docker-compose.prod.yml logs -f
+```
 
 ## Переменные окружения
 
 ### Бэкенд (.env в папке backend)
-
-PORT=5000
-NODE_ENV=development
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=your_db_password
-DB_NAME=clean_text_db
-
-JWT_SECRET=your_super_secret_key
-ACCESS_TOKEN_EXPIRES=15m
-REFRESH_TOKEN_EXPIRES=7d
-
-REDIS_HOST=localhost
-REDIS_PORT=6379
+```plaintext
+   PORT=5000
+   NODE_ENV=development
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=postgres
+   DB_PASSWORD=your_db_password
+   DB_NAME=clean_text_db
+   JWT_SECRET=your_super_secret_key
+   ACCESS_TOKEN_EXPIRES=15m
+   REFRESH_TOKEN_EXPIRES=7d
+   REDIS_HOST=localhost
+   REDIS_PORT=6379
+```
 
 ### Фронтенд (.env в папке frontend)
-
-VITE_API_URL=http://localhost:5000
-VITE_WS_URL=ws://localhost:5000
+```plaintext
+   VITE_API_URL=http://localhost:5000
+   VITE_WS_URL=ws://localhost:5000
+```
 
 ### Корневой .env (для Docker)
-
-DB_PASSWORD=your_db_password
-JWT_SECRET=your_super_secret_key
+```plaintext
+   DB_PASSWORD=your_db_password
+   JWT_SECRET=your_super_secret_key
+```
 
 ## API документация
 
 После запуска бэкенда документация Swagger доступна по адресу:
 http://localhost:5000/api-docs
 
-Основные эндпоинты:
+## Основные эндпоинты:
 
 Метод - Путь - Описание
 
@@ -174,25 +204,26 @@ GET - /admin/users - Все пользователи (админ)
 GET - /export/tasks - Экспорт задач в CSV
 
 ## Тестирование
+```bash
+   cd backend
+   npm test
+```
 
-cd backend
-npm test
-
-## Деплой на VPS
+## Деплой на VPS (не проверено)
 
 1. Установите Docker и Docker Compose на сервере.
 2. Склонируйте репозиторий на сервер:
-
-git clone https://github.com/antonababkov/clean-txt.git /opt/clean-txt
-cd /opt/clean-txt
-
+```bash
+   git clone https://github.com/antonababkov/clean-txt.git /opt/clean-txt
+   cd /opt/clean-txt
+```
 3. Создайте файл .env с продакшен-параметрами.
 4. Запустите контейнеры:
    docker-compose -f docker-compose.prod.yml up -d
 5. Настройте Nginx на сервере для проксирования на порты 80 (фронтенд) и 5000 (бэкенд).
 6. Настройте SSL
 
-## CI/CD
+## CI/CD (не проверено)
 
 GitHub Actions автоматически:
 
@@ -204,7 +235,7 @@ GitHub Actions автоматически:
 
 Деплоит на VPS через SSH.
 
-Для работы CI/CD добавьте секреты в настройках репозитория:
+## Для работы CI/CD добавьте секреты в настройках репозитория: (не проверено)
 
 Секрет - Описание
 
