@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, lazy, Suspense } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { useWebSocket } from "./hooks/useWebSocket";
 import { useAppSelector } from "./store/hooks";
 import { Toaster, toast } from "react-hot-toast";
@@ -39,64 +40,66 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Toaster position="top-right" />
-      <div className="min-h-screen text-gray-900 transition-colors duration-300 bg-neutral-100 dark:bg-gray-900 dark:text-gray-100">
-        <AuthLoader>
-          <Navbar />
-          <div className="container px-2 pb-4 mx-auto mt-4">
-            <Suspense fallback={<LoadingSpinner />}>
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route
-                  path="/"
-                  element={
-                    <PrivateRoute>
-                      <Dashboard />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/new"
-                  element={
-                    <PrivateRoute>
-                      <NewTask />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/history"
-                  element={
-                    <PrivateRoute>
-                      <History />
-                    </PrivateRoute>
-                  }
-                />
+    <HelmetProvider>
+      <BrowserRouter>
+        <Toaster position="top-right" />
+        <div className="min-h-screen text-gray-900 transition-colors duration-300 bg-neutral-100 dark:bg-gray-900 dark:text-gray-100">
+          <AuthLoader>
+            <Navbar />
+            <div className="container px-2 pb-4 mx-auto mt-4">
+              <Suspense fallback={<LoadingSpinner />}>
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route
+                    path="/"
+                    element={
+                      <PrivateRoute>
+                        <Dashboard />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/new"
+                    element={
+                      <PrivateRoute>
+                        <NewTask />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/history"
+                    element={
+                      <PrivateRoute>
+                        <History />
+                      </PrivateRoute>
+                    }
+                  />
 
-                <Route
-                  path="/admin/tasks"
-                  element={
-                    <AdminRoute>
-                      <TasksList />
-                    </AdminRoute>
-                  }
-                />
-                <Route
-                  path="/admin"
-                  element={
-                    <AdminRoute>
-                      <AdminPanel />
-                    </AdminRoute>
-                  }
-                />
-                <Route path="*" element={<NotFound404 />} />
-              </Routes>
-            </Suspense>
-          </div>
-        </AuthLoader>
-      </div>
-    </BrowserRouter>
+                  <Route
+                    path="/admin/tasks"
+                    element={
+                      <AdminRoute>
+                        <TasksList />
+                      </AdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin"
+                    element={
+                      <AdminRoute>
+                        <AdminPanel />
+                      </AdminRoute>
+                    }
+                  />
+                  <Route path="*" element={<NotFound404 />} />
+                </Routes>
+              </Suspense>
+            </div>
+          </AuthLoader>
+        </div>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 
