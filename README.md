@@ -71,12 +71,14 @@ clean-txt/
 ### Локальный запуск (без Docker) (не проверено)
 
 1. Клонируйте репозиторий:
- ```bash
-   git clone https://github.com/antonababkov/clean-txt.git
-   cd clean-txt
+
+```bash
+  git clone https://github.com/antonababkov/clean-txt.git
+  cd clean-txt
 ```
 
 2. Установите зависимости для бэкенда и фронтенда:
+
 ```bash
    cd backend
    npm install
@@ -87,58 +89,74 @@ clean-txt/
 3. Создайте файлы .env в папках backend и frontend
 4. Убедитесь, что PostgreSQL и Redis запущены локально.
 5. Запустите бэкенд:
+
 ```bash
    cd backend
    npm run dev
 ```
+
 6. Запустите фронтенд:
+
 ```bash
    cd frontend
    npm run dev
 ```
+
 7. Откройте http://localhost:5173
 
 ### Запуск с Docker (разработка) (не проверено)
 
 1. Клонируйте репозиторий:
- ```bash
-   git clone https://github.com/antonababkov/clean-txt.git
-   cd clean-txt
+
+```bash
+  git clone https://github.com/antonababkov/clean-txt.git
+  cd clean-txt
 ```
+
 2. Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET).
 3. Создайте файлы .env в папках backend и frontend
 4. Установите зависимости для бэкенда и фронтенда:
+
 ```bash
    cd backend
    npm install
    cd ../frontend
    npm install
 ```
+
 5. Запустите контейнеры:
+
 ```bash
    docker-compose -f docker-compose.dev.yml up -d
 ```
+
 6. Фронтенд доступен на http://localhost:5173, бэкенд – на http://localhost:5000.
 7. Для остановки:
+
 ```bash
    docker-compose -f docker-compose.dev.yml down
 ```
-   
 
 ### Запуск с Docker (продакшен) (не проверено)
 
 1. Соберите образы и запустите:
+
 ```bash
    docker-compose -f docker-compose.prod.yml up -d
 ```
+
 2. Проверьте логи:
+
 ```bash
    docker-compose -f docker-compose.prod.yml logs -f
 ```
 
+````
+
 ## Переменные окружения
 
 ### Бэкенд (.env в папке backend)
+
 ```plaintext
    PORT=5000
    NODE_ENV=development
@@ -152,15 +170,17 @@ clean-txt/
    REFRESH_TOKEN_EXPIRES=7d
    REDIS_HOST=localhost
    REDIS_PORT=6379
-```
+````
 
 ### Фронтенд (.env в папке frontend)
+
 ```plaintext
    VITE_API_URL=http://localhost:5000
    VITE_WS_URL=ws://localhost:5000
 ```
 
 ### Корневой .env (для Docker)
+
 ```plaintext
    DB_PASSWORD=your_db_password
    JWT_SECRET=your_super_secret_key
@@ -170,6 +190,8 @@ clean-txt/
 
 После запуска бэкенда документация Swagger доступна по адресу:
 http://localhost:5000/api-docs
+
+## Основные эндпоинты:
 
 ## Основные эндпоинты:
 
@@ -204,6 +226,7 @@ GET - /admin/users - Все пользователи (админ)
 GET - /export/tasks - Экспорт задач в CSV
 
 ## Тестирование
+
 ```bash
    cd backend
    npm test
@@ -211,17 +234,23 @@ GET - /export/tasks - Экспорт задач в CSV
 
 ## Деплой на VPS (не проверено)
 
+## Деплой на VPS (не проверено)
+
 1. Установите Docker и Docker Compose на сервере.
 2. Склонируйте репозиторий на сервер:
+
 ```bash
    git clone https://github.com/antonababkov/clean-txt.git /opt/clean-txt
    cd /opt/clean-txt
 ```
+
 3. Создайте файл .env с продакшен-параметрами.
 4. Запустите контейнеры:
    docker-compose -f docker-compose.prod.yml up -d
 5. Настройте Nginx на сервере для проксирования на порты 80 (фронтенд) и 5000 (бэкенд).
 6. Настройте SSL
+
+## CI/CD (не проверено)
 
 ## CI/CD (не проверено)
 
@@ -234,6 +263,8 @@ GitHub Actions автоматически:
 Публикует их на Docker Hub.
 
 Деплоит на VPS через SSH.
+
+## Для работы CI/CD добавьте секреты в настройках репозитория: (не проверено)
 
 ## Для работы CI/CD добавьте секреты в настройках репозитория: (не проверено)
 
