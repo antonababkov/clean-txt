@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { register } from "../../store/slices/authSlice";
 import SEO from "../common/SEO";
+import JsonLd from "../common/JsonLd";
 
 /* протестировать */
 const Register = () => {
@@ -32,12 +33,34 @@ const Register = () => {
     }
   };
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Регистрация в Clean Text Service",
+    description:
+      "Создайте бесплатный аккаунт и начните очищать текст от лишних символов.",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Главная",
+          item: "https://your-domain.com",
+        },
+        { "@type": "ListItem", position: 2, name: "Регистрация" },
+      ],
+    },
+    url: "https://your-domain.com/register",
+  };
+
   return (
     <>
       <SEO
         title="Регистрация в Clean Text Service"
         description="Зарегистрируйтесь и начните очищать текст от лишних символов"
       />
+      <JsonLd data={jsonLdData} />
       <div className="p-6 mx-auto mt-10 border rounded shadow max-w-80 sm:max-w-md">
         <h2 className="mb-4 text-2xl font-bold">Регистрация</h2>
         <form onSubmit={handleSubmit}>

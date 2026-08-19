@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { createTask } from "../store/slices/taskSlice";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import SEO from "../components/common/SEO";
+import JsonLd from "../components/common/JsonLd";
 
 const MAX_LENGTH = 5000;
 
@@ -36,12 +37,40 @@ const NewTask = () => {
     counterColor = "text-yellow-600 dark:text-yellow-400";
   if (percent > 95) counterColor = "text-red-600 dark:text-red-400";
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Очистка текста онлайн",
+    description:
+      "Отправьте текст на очистку: удалите HTML-теги, лишние пробелы и управляющие символы. Мгновенный результат.",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Главная",
+          item: "https://your-domain.com",
+        },
+        { "@type": "ListItem", position: 2, name: "Новая очистка" },
+      ],
+    },
+    mainEntity: {
+      "@type": "WebApplication",
+      name: "Инструмент очистки текста",
+      applicationCategory: "Utility",
+      operatingSystem: "All",
+    },
+    url: "https://your-domain.com/new",
+  };
+
   return (
     <>
       <SEO
         title="Новая очистка текста"
         description="Отправьте текст на очистку от HTML-тегов и пробелов"
       />
+      <JsonLd data={jsonLdData} />
       <div className="mx-auto max-w-80 sm:max-w-2xl">
         <h2 className="mb-4 text-2xl font-bold">Очистка текста</h2>
         <form onSubmit={handleSubmit}>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { login } from "../../store/slices/authSlice";
 import SEO from "../common/SEO";
+import JsonLd from "../common/JsonLd";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -25,12 +26,34 @@ const Login = () => {
     }
   };
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Вход в Clean Text Service",
+    description:
+      "Войдите в свой аккаунт для доступа к инструментам очистки текста и истории операций.",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Главная",
+          item: "https://your-domain.com",
+        },
+        { "@type": "ListItem", position: 2, name: "Вход" },
+      ],
+    },
+    url: "https://your-domain.com/login",
+  };
+
   return (
     <>
       <SEO
         title="Вход в Clean Text Service"
         description="Войдите в свой аккаунт для использования сервиса очистки текста"
       />
+      <JsonLd data={jsonLdData} />
       <div className="p-6 mx-auto mt-10 border rounded shadow max-w-80 sm:max-w-md">
         <h2 className="mb-4 text-2xl font-bold">Вход</h2>
         <form onSubmit={handleSubmit}>

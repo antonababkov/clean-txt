@@ -37,6 +37,6 @@
     "sourceMap": true,
     "removeComments": true
   },
-  "include": ["src", "src/**/*.d.ts", "src/**/**/*.d.ts"],
+  "include": ["src", "src/**/*.d.ts", "src/**/**/*.d.ts", "scripts"],
   "exclude": ["node_modules", "dist", "build", "**/*.test.ts", "**/*.spec.ts"]
 }
