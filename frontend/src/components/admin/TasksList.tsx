@@ -7,6 +7,7 @@ import {
 } from "../../store/slices/adminSlice";
 import ConfirmDialog from "../common/ConfirmDialog";
 import SEO from "../common/SEO";
+import JsonLd from "../common/JsonLd";
 
 const TasksList = () => {
   const dispatch = useAppDispatch();
@@ -107,6 +108,33 @@ const TasksList = () => {
     }, 150);
   };
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Все задачи очистки (админ)",
+    description:
+      "Полный список всех задач по очистке текста, созданных пользователями сервиса.",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Главная",
+          item: "https://your-domain.com",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Админ-панель",
+          item: "https://your-domain.com/admin",
+        },
+        { "@type": "ListItem", position: 3, name: "Все задачи" },
+      ],
+    },
+    url: "https://your-domain.com/admin/tasks",
+  };
+
   if (loading) return <div className="text-center">Загрузка...</div>;
 
   return (
@@ -115,6 +143,7 @@ const TasksList = () => {
         title="Админ-панель Clean Text Service"
         description="Управляйте всеми задачами очистки"
       />
+      <JsonLd data={jsonLdData} />
       <div className="p-4">
         <h2 className="mb-4 text-2xl font-bold">Все задания</h2>
 
