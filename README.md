@@ -114,7 +114,7 @@ clean-txt/
 ```
 
 2. Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET).
-3. Создайте файлы .env в папках backend и frontend
+3. Создайте файлы .env в папках backend и frontend. (см. Переменные окружения)
 4. Установите зависимости для бэкенда и фронтенда:
 
 ```bash
@@ -151,8 +151,6 @@ clean-txt/
    docker-compose -f docker-compose.prod.yml logs -f
 ```
 
-````
-
 ## Переменные окружения
 
 ### Бэкенд (.env в папке backend)
@@ -170,7 +168,7 @@ clean-txt/
    REFRESH_TOKEN_EXPIRES=7d
    REDIS_HOST=localhost
    REDIS_PORT=6379
-````
+```
 
 ### Фронтенд (.env в папке frontend)
 
