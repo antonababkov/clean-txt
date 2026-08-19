@@ -226,6 +226,10 @@ GET - /admin/users - Все пользователи (админ)
 GET - /export/tasks - Экспорт задач в CSV
 
 ## Тестирование
+```bash
+   cd backend
+   npm test
+```
 
 ```bash
    cd backend
