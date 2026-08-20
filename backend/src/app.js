@@ -22,6 +22,8 @@ const allowedOrigins = [
   "http://localhost:4173", // для preview-сборки
   "http://localhost:3000", // возможный порт
   "https://ваш-домен.ру", // для продакшена
+  "http://localhost", // явно с портом
+  "http://127.0.0.1", // альтернативный локальный адрес
 ];
 
 dotenv.config();
@@ -37,6 +39,7 @@ app.use(helmet());
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log("CORS request from origin:", origin); // Логируем origin
       // Разрешаем запросы без origin (например, от curl/Postman) в разработке
       if (!origin) return callback(null, true);
       if (allowedOrigins.indexOf(origin) !== -1) {

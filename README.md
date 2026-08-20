@@ -58,7 +58,8 @@ clean-txt/
 │   ├── Dockerfile           # Продакшен-образ (с Nginx)
 │   ├── Dockerfile.dev       # Образ для разработки
 │   ├── package.json
-│   └── .env
+│   ├── .env.development
+│   └── .env.prodaction
 ├── docker-compose.yml       # (опционально) общий compose
 ├── docker-compose.dev.yml   # Для локальной разработки
 ├── docker-compose.prod.yml  # Для продакшена
@@ -159,21 +160,6 @@ clean-txt/
 2.  Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET и DOCKER_USERNAME).
 3.  Создайте файл .env в папке backend (см. раздел Переменные окружения).
 4.  Создайте файлы .env.development и .env.production в папке frontend. (см. Переменные окружения)
-
-frontend/.env.development (для локальной разработки)
-
-```bash
-   VITE_API_URL=http://localhost:5000
-   VITE_WS_URL=ws://localhost:5000
-```
-
-frontend/.env.production (для продакшен-сборки):
-
-```bash
-   VITE_API_URL=/api
-   VITE_WS_URL=ws://localhost/ws   # опционально, если настроите прокси для WebSocket
-```
-
 5.  Установите зависимости для бэкенда и фронтенда:
 
 ```bash
@@ -181,31 +167,6 @@ frontend/.env.production (для продакшен-сборки):
    npm install
    cd ../frontend
    npm install
-```
-
-6. Создайте или обновите файл frontend/nginx.conf со следующим содержимым:
-
-```bash
-   server {
-    listen 80;
-    server_name localhost;
-    root /usr/share/nginx/html;
-    index index.html;
-
-    # Прокси для API-запросов
-    location /api/ {
-        proxy_pass http://backend:5000/;   # имя сервиса бэкенда из docker-compose.prod.yml
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    # Для SPA: все остальные запросы отдаём index.html
-    location / {
-        try_files $uri /index.html;
-    }
-}
 ```
 
 7. Убедитесь, что в docker-compose.prod.yml сервис бэкенда называется backend – именно это имя используется в proxy_pass. Если имя другое, измените его в nginx.conf
@@ -272,11 +233,18 @@ frontend/.env.production (для продакшен-сборки):
    REDIS_PORT=6379
 ```
 
-### Фронтенд (.env в папке frontend)
+### Фронтенд (.env.development в папке frontend)
 
 ```plaintext
    VITE_API_URL=http://localhost:5000
-   VITE_WS_URL=ws://localhost:5000
+   VITE_WS_URL=ws://localhost:5000/ws
+```
+
+### Фронтенд (.env.production в папке frontend)
+
+```plaintext
+   VITE_API_URL=/api
+   VITE_WS_URL=ws://localhost/ws
 ```
 
 ### Корневой .env (для Docker)
