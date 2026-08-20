@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchTasks } from "../store/slices/taskSlice";
 import SEO from "../components/common/SEO";
+import JsonLd from "../components/common/JsonLd";
 import toast from "react-hot-toast";
 import api from "../api/axiosConfig";
 
@@ -45,12 +46,33 @@ const History = () => {
     }
   };
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "История очисток текста",
+    description: "Просматривайте все предыдущие задачи по очистке текста.",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Главная",
+          item: "https://your-domain.com",
+        },
+        { "@type": "ListItem", position: 2, name: "История" },
+      ],
+    },
+    url: "https://your-domain.com/history",
+  };
+
   return (
     <>
       <SEO
         title="История очисток текста"
         description="Просматривайте и управляйте своими предыдущими задачами"
       />
+      <JsonLd data={jsonLdData} />
       <div>
         <h2 className="mb-4 text-2xl font-bold">История очистки</h2>
         <button

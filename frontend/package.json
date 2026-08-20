@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build && node scripts/generateSitemap.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
