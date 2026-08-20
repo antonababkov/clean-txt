@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "scripts": {
     "docker:dev": "docker-compose -f docker-compose.dev.yml up -d",
-    "docker:prod": "docker-compose -f docker-compose.prod.yml up -d",
     "docker:dev:down": "docker-compose -f docker-compose.dev.yml down",
-    "docker:prod:down": "docker-compose -f docker-compose.prod.yml down",
+    "docker:dev:stop": "docker-compose -f docker-compose.dev.yml stop",
     "docker:dev:logs": "docker-compose -f docker-compose.dev.yml logs -f",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up -d",
+    "docker:prod:down": "docker-compose -f docker-compose.prod.yml down",
+    "docker:prod:stop": "docker-compose -f docker-compose.prod.yml stop",
     "docker:prod:logs": "docker-compose -f docker-compose.prod.yml logs -f"
   }
 }
