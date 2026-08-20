@@ -126,31 +126,78 @@ clean-txt/
    npm install
 ```
 
-5. Запустите контейнеры:
+5. Запустите контейнеры из корневой папки:
 
 ```bash
-   docker-compose -f docker-compose.dev.yml up -d
+   npm run docker:dev
 ```
 
 6. Фронтенд доступен на http://localhost:5173, бэкенд – на http://localhost:5000.
-7. Для остановки:
+7. Для остановки контейнеров:
 
 ```bash
-   docker-compose -f docker-compose.dev.yml down
+   npm run docker:dev:stop
 ```
 
-### Запуск с Docker (продакшен) (не проверено)
-
-1. Соберите образы и запустите:
+8. Для удаления контейнеров:
 
 ```bash
-   docker-compose -f docker-compose.prod.yml up -d
+   npm run docker:dev:down
 ```
 
-2. Проверьте логи:
+### Запуск с Docker (продакшен) (в разработке) (не проверено)
+
+1. Клонируйте репозиторий:
 
 ```bash
-   docker-compose -f docker-compose.prod.yml logs -f
+  git clone https://github.com/antonababkov/clean-txt.git
+  cd clean-txt
+```
+
+2. Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET).
+3. Создайте файлы .env в папках backend и frontend. (см. Переменные окружения)
+4. Установите зависимости для бэкенда и фронтенда:
+
+```bash
+   cd backend
+   npm install
+   cd ../frontend
+   npm install
+```
+
+5. Соберите образы Docker локально из корневой папки проекта.
+
+```bash
+   docker build -t antonababkov/clean-text-backend:latest ./backend
+   docker build -t antonababkov/clean-text-frontend:latest ./frontend
+```
+
+6. Запуск контейнеров
+
+```bash
+   npm run docker:prod
+```
+
+7. После запуска:
+
+```plaintext
+   Фронтенд доступен по адресу: http://localhost:80 (или порт, указанный в docker-compose.prod.yml)
+
+   Бэкенд доступен по адресу: http://localhost:5000
+
+   Swagger документация: http://localhost:5000/api-docs
+```
+
+8. Для остановки контейнеров:
+
+```bash
+   npm run docker:prod:stop
+```
+
+9. Для удаления контейнеров:
+
+```bash
+   npm run docker:prod:down
 ```
 
 ## Переменные окружения
@@ -164,7 +211,7 @@ clean-txt/
    DB_PORT=5432
    DB_USER=postgres
    DB_PASSWORD=your_db_password
-   DB_NAME=clean_text_db
+   DB_NAME=your_db_name
    JWT_SECRET=your_super_secret_key
    ACCESS_TOKEN_EXPIRES=15m
    REFRESH_TOKEN_EXPIRES=7d
@@ -184,6 +231,7 @@ clean-txt/
 ```plaintext
    DB_PASSWORD=your_db_password
    JWT_SECRET=your_super_secret_key
+   DOCKER_USERNAME=your_docker_username
 ```
 
 ## API документация
