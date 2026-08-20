@@ -51,16 +51,18 @@ clean-txt/
 │   ├── tests/               # Интеграционные тесты
 │   ├── Dockerfile           # Продакшен-образ
 │   ├── Dockerfile.dev       # Образ для разработки
-│   └── package.json
+│   ├── package.json
+│   └── .env
 ├── frontend/
 │   ├── src/                 # React-приложение
 │   ├── Dockerfile           # Продакшен-образ (с Nginx)
 │   ├── Dockerfile.dev       # Образ для разработки
-│   └── package.json
+│   ├── package.json
+│   └── .env
 ├── docker-compose.yml       # (опционально) общий compose
 ├── docker-compose.dev.yml   # Для локальной разработки
 ├── docker-compose.prod.yml  # Для продакшена
-├── .env                     # Переменные окружения (не коммитится)
+├── .env                     # Переменные окружения
 └── README.md
 ```
 
