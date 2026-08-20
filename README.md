@@ -145,16 +145,16 @@ clean-txt/
    npm run docker:dev:down
 ```
 
-### Запуск с Docker (продакшен) (в разработке) (не проверено)
+### Запуск с Docker (продакшен)
 
 1. Клонируйте репозиторий:
 
 ```bash
-  git clone https://github.com/antonababkov/clean-txt.git
-  cd clean-txt
+   git clone https://github.com/antonababkov/clean-txt.git
+   cd clean-txt
 ```
 
-2. Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET).
+2. Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET и DOCKER_USERNAME).
 3. Создайте файлы .env в папках backend и frontend. (см. Переменные окружения)
 4. Установите зависимости для бэкенда и фронтенда:
 
