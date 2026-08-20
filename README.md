@@ -147,6 +147,8 @@ clean-txt/
 
 ### Запуск с Docker (продакшен)
 
+Важно: перед запуском убедитесь, что у вас установлены Docker и Docker Compose. Также убедитесь, что порты 80 и 5000 не заняты другими приложениями.
+
 1. Клонируйте репозиторий:
 
 ```bash
@@ -154,9 +156,25 @@ clean-txt/
    cd clean-txt
 ```
 
-2. Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET и DOCKER_USERNAME).
-3. Создайте файлы .env в папках backend и frontend. (см. Переменные окружения)
-4. Установите зависимости для бэкенда и фронтенда:
+2.  Создайте файл .env в корне проекта (содержит DB_PASSWORD и JWT_SECRET и DOCKER_USERNAME).
+3.  Создайте файл .env в папке backend (см. раздел Переменные окружения).
+4.  Создайте файлы .env.development и .env.production в папке frontend. (см. Переменные окружения)
+
+frontend/.env.development (для локальной разработки)
+
+```bash
+   VITE_API_URL=http://localhost:5000
+   VITE_WS_URL=ws://localhost:5000
+```
+
+frontend/.env.production (для продакшен-сборки):
+
+```bash
+   VITE_API_URL=/api
+   VITE_WS_URL=ws://localhost/ws   # опционально, если настроите прокси для WebSocket
+```
+
+5.  Установите зависимости для бэкенда и фронтенда:
 
 ```bash
    cd backend
@@ -165,20 +183,49 @@ clean-txt/
    npm install
 ```
 
-5. Соберите образы Docker локально из корневой папки проекта.
+6. Создайте или обновите файл frontend/nginx.conf со следующим содержимым:
+
+```bash
+   server {
+    listen 80;
+    server_name localhost;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Прокси для API-запросов
+    location /api/ {
+        proxy_pass http://backend:5000/;   # имя сервиса бэкенда из docker-compose.prod.yml
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Для SPA: все остальные запросы отдаём index.html
+    location / {
+        try_files $uri /index.html;
+    }
+}
+```
+
+7. Убедитесь, что в docker-compose.prod.yml сервис бэкенда называется backend – именно это имя используется в proxy_pass. Если имя другое, измените его в nginx.conf
+
+8. Соберите образы Docker локально из корневой папки проекта.
 
 ```bash
    docker build -t antonababkov/clean-text-backend:latest ./backend
    docker build -t antonababkov/clean-text-frontend:latest ./frontend
 ```
 
-6. Запуск контейнеров
+Примечание: при сборке фронтенда Vite автоматически подхватит .env.production, если он есть в папке frontend. Убедитесь, что этот файл не исключён в .dockerignore
+
+9. Запуск контейнеров
 
 ```bash
    npm run docker:prod
 ```
 
-7. После запуска:
+10. После запуска:
 
 ```plaintext
    Фронтенд доступен по адресу: http://localhost:80 (или порт, указанный в docker-compose.prod.yml)
@@ -188,13 +235,19 @@ clean-txt/
    Swagger документация: http://localhost:5000/api-docs
 ```
 
-8. Для остановки контейнеров:
+11. Просмотр логов
+
+```bash
+   docker:prod:logs
+```
+
+12. Для остановки контейнеров:
 
 ```bash
    npm run docker:prod:stop
 ```
 
-9. Для удаления контейнеров:
+13. Для удаления контейнеров:
 
 ```bash
    npm run docker:prod:down
