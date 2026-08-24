@@ -1,5 +1,7 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import { auth, isAdmin } from "./middleware/auth.js";
+import { verifyToken } from "./utils/jwt.js";
 
 const options = {
   definition: {
@@ -53,6 +55,19 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
+// Middleware для проверки доступа (refresh token из cookie)
+const swaggerAuth = (req, res, next) => {
+  const refreshToken = req.cookies?.refreshToken;
+  if (!refreshToken) {
+    return res.redirect("/404"); // нет токена → на 404
+  }
+  const decoded = verifyToken(refreshToken);
+  if (!decoded || decoded.role !== "admin") {
+    return res.redirect("/404"); // невалидный или не админ → на 404
+  }
+  next(); // пропускаем к Swagger
+};
+
 export const setupSwagger = (app) => {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+  app.use("/api-docs", swaggerAuth, swaggerUi.serve, swaggerUi.setup(specs));
 };
