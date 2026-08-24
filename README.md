@@ -59,7 +59,7 @@ clean-txt/
 │   ├── Dockerfile.dev       # Образ для разработки
 │   ├── package.json
 │   ├── .env.development
-│   └── .env.prodaction
+│   └── .env.production
 ├── docker-compose.yml       # (опционально) общий compose
 ├── docker-compose.dev.yml   # Для локальной разработки
 ├── docker-compose.prod.yml  # Для продакшена
@@ -193,7 +193,7 @@ clean-txt/
 
    Бэкенд доступен по адресу: http://localhost:5000
 
-   Swagger документация: http://localhost:5000/api-docs
+   Swagger документация: http://localhost:5000/api-docs (Доступен только пользователям с ролью admin)
 ```
 
 11. Просмотр логов
