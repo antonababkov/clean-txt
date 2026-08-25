@@ -4,8 +4,8 @@ import { logout, setAccessToken } from "../store/slices/authSlice";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  headers: { "Content-Type": "application/json" },
   withCredentials: true,
+  headers: { "Content-Type": "application/json" },
 });
 
 // Интерцептор для добавления access token

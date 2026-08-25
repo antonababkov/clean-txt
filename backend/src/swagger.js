@@ -57,15 +57,26 @@ const specs = swaggerJsdoc(options);
 
 // Middleware для проверки доступа (refresh token из cookie)
 const swaggerAuth = (req, res, next) => {
+  // В разработке пропускаем проверку (для удобства)
+  if (process.env.NODE_ENV === "development") {
+    console.log("Swagger доступен в разработке без авторизации");
+    return next();
+  }
+
+  // В продакшене проверяем refresh token из cookie
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
-    return res.redirect("/404"); // нет токена → на 404
+    return res.redirect(
+      `${process.env.FRONTEND_URL || "http://localhost"}/404`,
+    );
   }
   const decoded = verifyToken(refreshToken);
   if (!decoded || decoded.role !== "admin") {
-    return res.redirect("/404"); // невалидный или не админ → на 404
+    return res.redirect(
+      `${process.env.FRONTEND_URL || "http://localhost"}/404`,
+    );
   }
-  next(); // пропускаем к Swagger
+  next();
 };
 
 export const setupSwagger = (app) => {
