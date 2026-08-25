@@ -253,6 +253,15 @@ clean-txt/
    DB_PASSWORD=your_db_password
    JWT_SECRET=your_super_secret_key
    DOCKER_USERNAME=your_docker_username
+   FRONTEND_URL=your_frontend_url
+```
+
+## Создание пользователя с ролью admin
+
+После регистрации обычного пользователя, обновите его role в БД через SQL
+
+```bash
+   UPDATE users SET role = 'admin' WHERE email = 'your_email';
 ```
 
 ## API документация

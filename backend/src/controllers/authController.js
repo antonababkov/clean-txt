@@ -10,9 +10,10 @@ import User from "../models/User.js";
 const setRefreshTokenCookie = (res, refreshToken) => {
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // только HTTPS в проде
-    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production" ? true : false, //process.env.NODE_ENV === 'production' ? true : false, // для локального prod-теста с http ставим false
+    sameSite: "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 дней
+    //domain: "localhost", // не указывайте, чтобы cookie был доступен для обоих портов
   });
 };
 
