@@ -59,7 +59,7 @@ clean-txt/
 │   ├── Dockerfile.dev       # Образ для разработки
 │   ├── package.json
 │   ├── .env.development
-│   └── .env.prodaction
+│   └── .env.production
 ├── docker-compose.yml       # (опционально) общий compose
 ├── docker-compose.dev.yml   # Для локальной разработки
 ├── docker-compose.prod.yml  # Для продакшена
@@ -193,7 +193,7 @@ clean-txt/
 
    Бэкенд доступен по адресу: http://localhost:5000
 
-   Swagger документация: http://localhost:5000/api-docs
+   Swagger документация: http://localhost:5000/api-docs (Доступен только пользователям с ролью admin)
 ```
 
 11. Просмотр логов
@@ -253,6 +253,15 @@ clean-txt/
    DB_PASSWORD=your_db_password
    JWT_SECRET=your_super_secret_key
    DOCKER_USERNAME=your_docker_username
+   FRONTEND_URL=your_frontend_url
+```
+
+## Создание пользователя с ролью admin
+
+После регистрации обычного пользователя, обновите его role в БД через SQL
+
+```bash
+   UPDATE users SET role = 'admin' WHERE email = 'your_email';
 ```
 
 ## API документация

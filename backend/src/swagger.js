@@ -1,5 +1,7 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import { auth, isAdmin } from "./middleware/auth.js";
+import { verifyToken } from "./utils/jwt.js";
 
 const options = {
   definition: {
@@ -53,6 +55,30 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
+// Middleware для проверки доступа (refresh token из cookie)
+const swaggerAuth = (req, res, next) => {
+  // В разработке пропускаем проверку (для удобства)
+  if (process.env.NODE_ENV === "development") {
+    console.log("Swagger доступен в разработке без авторизации");
+    return next();
+  }
+
+  // В продакшене проверяем refresh token из cookie
+  const refreshToken = req.cookies?.refreshToken;
+  if (!refreshToken) {
+    return res.redirect(
+      `${process.env.FRONTEND_URL || "http://localhost"}/404`,
+    );
+  }
+  const decoded = verifyToken(refreshToken);
+  if (!decoded || decoded.role !== "admin") {
+    return res.redirect(
+      `${process.env.FRONTEND_URL || "http://localhost"}/404`,
+    );
+  }
+  next();
+};
+
 export const setupSwagger = (app) => {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+  app.use("/api-docs", swaggerAuth, swaggerUi.serve, swaggerUi.setup(specs));
 };
