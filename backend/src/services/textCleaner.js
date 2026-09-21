@@ -5,8 +5,15 @@ import crypto from "crypto";
 const cleanText = (text) => {
   if (typeof text !== "string") return "";
   let cleaned = text.replace(/<[^>]*>/g, "");
+  // Удаляем скрытые метки и управляющие символы: форматирующие (Cf) — zero-width
+  // пробелы, joiner'ы, BOM, софт-дефис, bidi-метки и т.п., — и все управляющие (Cc)
+  // кроме whitespace-символов (\t, \n, \r, \v, \f, NEL), которые позже схлопнутся
+  // в одиночный пробел.
+  cleaned = cleaned.replace(/[\p{Cf}\p{Cc}]/gu, (ch) =>
+    /[\t\n\r\x0B\x0C\u0085]/.test(ch) ? ch : "",
+  );
+  // Схлопываем все пробельные последовательности (включая неразрывные и Unicode-пробелы) в один пробел
   cleaned = cleaned.replace(/\s+/g, " ");
-  cleaned = cleaned.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
   return cleaned.trim();
 };
 

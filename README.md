@@ -1,6 +1,6 @@
 # Clean Text Service
 
-Сервис для очистки текста от HTML-тегов, лишних пробелов и управляющих символов. Пользователь отправляет текст через веб-интерфейс, бэкенд очищает его, сохраняет историю операций, предоставляет статистику по запросам (графики) и уведомления в реальном времени.
+Сервис для очистки текста от HTML-тегов, лишних пробелов, управляющих символов и скрытых меток (невидимых Unicode-символов, например, оставляемых ChatGPT). Пользователь отправляет текст через веб-интерфейс, бэкенд очищает его, сохраняет историю операций, предоставляет статистику по запросам (графики) и уведомления в реальном времени.
 
 ---
 
@@ -229,8 +229,8 @@ clean-txt/
    JWT_SECRET=your_super_secret_key
    ACCESS_TOKEN_EXPIRES=15m
    REFRESH_TOKEN_EXPIRES=7d
-   REDIS_HOST=localhost
-   REDIS_PORT=6379
+   BCRYPT_SALT_ROUNDS=10
+   FRONTEND_URL=http://localhost:5173
 ```
 
 ### Фронтенд (.env.development в папке frontend)
@@ -251,6 +251,7 @@ clean-txt/
 
 ```plaintext
    DB_PASSWORD=your_db_password
+   REDIS_PASSWORD=your_redis_password
    JWT_SECRET=your_super_secret_key
    DOCKER_USERNAME=your_docker_username
    FRONTEND_URL=your_frontend_url

@@ -22,6 +22,7 @@ export const createTask = async (req, res, next) => {
       userId: req.user.userId,
       originalText,
       cleanedText,
+      removeHiddenMarkers: true,
     });
     // Отправляем уведомление создателю задачи
     notifyUser(req.user.userId, {
@@ -30,6 +31,7 @@ export const createTask = async (req, res, next) => {
         id: task.id,
         original_text: task.original_text,
         cleaned_text: task.cleaned_text,
+        remove_hidden_markers: task.remove_hidden_markers,
         created_at: task.created_at,
       },
     });
@@ -78,6 +80,7 @@ export const updateTask = async (req, res, next) => {
     const task = await CleaningTask.update(req.params.id, req.user.userId, {
       originalText,
       cleanedText,
+      removeHiddenMarkers: true,
     });
     if (!task) throw new NotFoundError("Задание не найдено");
     res.json(task);
