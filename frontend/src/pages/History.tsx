@@ -96,6 +96,11 @@ const History = () => {
               </p>
               <p className="text-sm text-gray-500">
                 {new Date(task.created_at).toLocaleString()}
+                {task.remove_hidden_markers && (
+                  <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded dark:bg-blue-900 dark:text-blue-200">
+                    Скрытые метки удалены
+                  </span>
+                )}
               </p>
             </div>
           ))}

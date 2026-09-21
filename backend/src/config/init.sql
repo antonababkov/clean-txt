@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS cleaning_tasks (
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     original_text TEXT NOT NULL,
     cleaned_text TEXT,
+    remove_hidden_markers BOOLEAN NOT NULL DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -5,6 +5,7 @@ interface Task {
   id: number;
   original_text: string;
   cleaned_text: string;
+  remove_hidden_markers: boolean;
   created_at: string;
   user_id: number;
 }
