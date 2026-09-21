@@ -111,6 +111,44 @@ describe("Tasks API", () => {
         .send({ originalText: "test" })
         .expect(401);
     });
+
+    it("должен удалить скрытые метки GPT (невидимые символы)", async () => {
+      const text =
+        "Привет\u200bмир\u00ad! Чтобы\u200cсохранить\u200dцелостность\u200e," +
+        "\uFEFF остальное\u2060уже\u202bочищено\u202e.";
+      const res = await request(app)
+        .post("/tasks")
+        .set("Authorization", `Bearer ${userToken}`)
+        .send({ originalText: text })
+        .expect(201);
+
+      expect(res.body.cleaned_text).toBe(
+        "Приветмир! Чтобысохранитьцелостность, остальноеужеочищено.",
+      );
+      expect(res.body.remove_hidden_markers).toBe(true);
+    });
+
+    it("должен удалить управляющие C1 и схлопнуть неразрывные пробелы", async () => {
+      const text = "Hello \u0081\u0082world\u00a0and\u00a0more";
+      const res = await request(app)
+        .post("/tasks")
+        .set("Authorization", `Bearer ${userToken}`)
+        .send({ originalText: text })
+        .expect(201);
+
+      expect(res.body.cleaned_text).toBe("Hello world and more");
+    });
+
+    it("не должен слипать слова при удалении только управляющих символов", async () => {
+      const text = "First\nsecond\tthird\vfourth";
+      const res = await request(app)
+        .post("/tasks")
+        .set("Authorization", `Bearer ${userToken}`)
+        .send({ originalText: text })
+        .expect(201);
+
+      expect(res.body.cleaned_text).toBe("First second third fourth");
+    });
   });
 
   describe("GET /tasks", () => {

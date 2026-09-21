@@ -7,7 +7,7 @@ export const exportTasksCSV = async (req, res, next) => {
     const role = req.user.role;
 
     let query = `
-      SELECT id, original_text, cleaned_text, created_at
+      SELECT id, original_text, cleaned_text, remove_hidden_markers, created_at
       FROM cleaning_tasks
     `;
     const params = [];
@@ -30,7 +30,7 @@ export const exportTasksCSV = async (req, res, next) => {
     }));
 
     const parser = new Parser({
-      fields: ["id", "original_text", "cleaned_text", "created_at"],
+      fields: ["id", "original_text", "cleaned_text", "remove_hidden_markers", "created_at"],
       header: true,
     });
     const csv = parser.parse(formattedTasks);

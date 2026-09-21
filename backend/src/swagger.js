@@ -26,6 +26,7 @@ const options = {
             user_id: { type: "integer" },
             original_text: { type: "string" },
             cleaned_text: { type: "string" },
+            remove_hidden_markers: { type: "boolean" },
             created_at: { type: "string", format: "date-time" },
             updated_at: { type: "string", format: "date-time" },
           },

@@ -35,7 +35,7 @@ describe("Export API", () => {
       expect(res.headers["content-type"]).toMatch(/text\/csv/);
       // Проверяем, что CSV содержит заголовки (с кавычками, так как json2csv экранирует)
       expect(res.text).toContain(
-        '"id","original_text","cleaned_text","created_at"',
+        '"id","original_text","cleaned_text","remove_hidden_markers","created_at"',
       );
     });
 

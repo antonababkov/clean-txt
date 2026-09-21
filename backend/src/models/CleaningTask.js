@@ -1,19 +1,24 @@
 import pool from "../config/db.js";
 
 class CleaningTask {
-  static async create({ userId, originalText, cleanedText }) {
+  static async create({
+    userId,
+    originalText,
+    cleanedText,
+    removeHiddenMarkers = true,
+  }) {
     const result = await pool.query(
-      `INSERT INTO cleaning_tasks (user_id, original_text, cleaned_text)
-     VALUES ($1, $2, $3)
-     RETURNING id, user_id, original_text, cleaned_text, created_at`,
-      [userId, originalText, cleanedText],
+      `INSERT INTO cleaning_tasks (user_id, original_text, cleaned_text, remove_hidden_markers)
+     VALUES ($1, $2, $3, $4)
+     RETURNING id, user_id, original_text, cleaned_text, remove_hidden_markers, created_at`,
+      [userId, originalText, cleanedText, removeHiddenMarkers],
     );
     return result.rows[0];
   }
 
   static async findByUserId(userId, { limit = 10, offset = 0 } = {}) {
     const result = await pool.query(
-      `SELECT id, user_id, original_text, cleaned_text, created_at
+      `SELECT id, user_id, original_text, cleaned_text, remove_hidden_markers, created_at
        FROM cleaning_tasks
        WHERE user_id = $1
        ORDER BY created_at DESC
@@ -38,13 +43,17 @@ class CleaningTask {
     return result.rows[0] || null;
   }
 
-  static async update(id, userId, { originalText, cleanedText }) {
+  static async update(
+    id,
+    userId,
+    { originalText, cleanedText, removeHiddenMarkers = true },
+  ) {
     const result = await pool.query(
       `UPDATE cleaning_tasks
-       SET original_text = $1, cleaned_text = $2, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $3 AND user_id = $4
+       SET original_text = $1, cleaned_text = $2, remove_hidden_markers = $3, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $4 AND user_id = $5
        RETURNING *`,
-      [originalText, cleanedText, id, userId],
+      [originalText, cleanedText, removeHiddenMarkers, id, userId],
     );
     return result.rows[0] || null;
   }
@@ -88,6 +97,7 @@ class CleaningTask {
       u.email,
       ct.original_text,
       ct.cleaned_text,
+      ct.remove_hidden_markers,
       ct.created_at,
       ct.updated_at
     FROM cleaning_tasks ct

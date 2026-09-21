@@ -42,7 +42,7 @@ const NewTask = () => {
     "@type": "WebPage",
     name: "Очистка текста онлайн",
     description:
-      "Отправьте текст на очистку: удалите HTML-теги, лишние пробелы и управляющие символы. Мгновенный результат.",
+      "Отправьте текст на очистку: удалите HTML-теги, лишние пробелы, управляющие символы и скрытые метки GPT. Мгновенный результат.",
     breadcrumb: {
       "@type": "BreadcrumbList",
       itemListElement: [
@@ -68,7 +68,7 @@ const NewTask = () => {
     <>
       <SEO
         title="Новая очистка текста"
-        description="Отправьте текст на очистку от HTML-тегов и пробелов"
+        description="Очистка текста от HTML-тегов, пробелов, управляющих символов и скрытых меток GPT"
       />
       <JsonLd data={jsonLdData} />
       <div className="mx-auto max-w-80 sm:max-w-2xl">
@@ -78,7 +78,7 @@ const NewTask = () => {
             id="newTask_input"
             className="w-full p-2 mb-2 text-gray-800 border rounded dark:text-gray-300"
             rows={6}
-            placeholder="Введите текст с HTML или лишними пробелами..."
+            placeholder="Введите текст с HTML, лишними пробелами или скрытыми метками..."
             value={text}
             onChange={(e) => setText(e.target.value)}
             maxLength={MAX_LENGTH}
@@ -114,6 +114,9 @@ const NewTask = () => {
               <h3 className="font-semibold text-gray-800 dark:text-gray-200">
                 Очищенный текст:
               </h3>
+              <p className="text-sm text-gray-500 mb-2 dark:text-gray-400">
+                Скрытые метки GPT удалены
+              </p>
               <p className="text-gray-700 break-all dark:text-gray-300">
                 {cleaned}
               </p>
