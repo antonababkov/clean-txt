@@ -6,6 +6,7 @@ import {
   deleteTask,
 } from "../../store/slices/adminSlice";
 import ConfirmDialog from "../common/ConfirmDialog";
+import toast from "react-hot-toast";
 import SEO from "../common/SEO";
 import JsonLd from "../common/JsonLd";
 
@@ -81,6 +82,15 @@ const TasksList = () => {
 
   const handleDeleteClick = (id: number) => {
     setConfirmDialog({ isOpen: true, taskId: id });
+  };
+
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Текст скопирован");
+    } catch {
+      toast.error("Не удалось скопировать текст");
+    }
   };
 
   const handleConfirmDelete = () => {
@@ -250,22 +260,40 @@ const TasksList = () => {
                   <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap dark:text-gray-100">
                     {task.email}
                   </td>
-                  <td className="max-w-xs px-6 py-4 text-sm text-gray-900 truncate dark:text-gray-100">
-                    {task.original_text}
+                  <td
+                    className="max-w-xs px-6 py-4 text-sm text-gray-900 dark:text-gray-100"
+                    title={task.original_text}
+                  >
+                    <div className="whitespace-pre-wrap break-words line-clamp-3">
+                      {task.original_text}
+                    </div>
                   </td>
-                  <td className="max-w-xs px-6 py-4 text-sm text-gray-900 truncate dark:text-gray-100">
-                    {task.cleaned_text}
+                  <td
+                    className="max-w-xs px-6 py-4 text-sm text-gray-900 dark:text-gray-100"
+                    title={task.cleaned_text}
+                  >
+                    <div className="whitespace-pre-wrap break-words line-clamp-3">
+                      {task.cleaned_text}
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                     {new Date(task.created_at).toLocaleString()}
                   </td>
                   <td className="px-6 py-4 text-sm whitespace-nowrap">
-                    <button
-                      onClick={() => handleDeleteClick(task.id)}
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-                    >
-                      Удалить
-                    </button>
+                    <div className="flex gap-3 whitespace-nowrap">
+                      <button
+                        onClick={() => handleCopy(task.cleaned_text)}
+                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                      >
+                        Копировать
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(task.id)}
+                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                      >
+                        Удалить
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

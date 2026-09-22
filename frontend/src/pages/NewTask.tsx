@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { createTask } from "../store/slices/taskSlice";
 import LoadingSpinner from "../components/common/LoadingSpinner";
+import toast from "react-hot-toast";
 import SEO from "../components/common/SEO";
 import JsonLd from "../components/common/JsonLd";
 
@@ -25,6 +26,15 @@ const NewTask = () => {
   const handleReset = () => {
     setText("");
     setCleaned("");
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(cleaned);
+      toast.success("Текст скопирован");
+    } catch {
+      toast.error("Не удалось скопировать текст");
+    }
   };
 
   const isOverLimit = text.length > MAX_LENGTH;
@@ -111,15 +121,19 @@ const NewTask = () => {
             <LoadingSpinner />
           ) : cleaned ? (
             <>
-              <h3 className="font-semibold text-gray-800 dark:text-gray-200">
+              <h3 className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
                 Очищенный текст:
               </h3>
-              <p className="text-sm text-gray-500 mb-2 dark:text-gray-400">
-                Скрытые метки GPT удалены
-              </p>
-              <p className="text-gray-700 break-all dark:text-gray-300">
+              <p className="text-gray-700 whitespace-pre-wrap break-words dark:text-gray-300">
                 {cleaned}
               </p>
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="px-3 py-1 mt-3 text-sm text-white bg-blue-500 rounded hover:bg-blue-600 disabled:opacity-50"
+              >
+                Копировать
+              </button>
             </>
           ) : (
             <p className="text-center text-gray-400 dark:text-gray-500">

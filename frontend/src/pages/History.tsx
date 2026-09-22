@@ -12,10 +12,20 @@ const History = () => {
   const [page, setPage] = useState(0);
   const [exporting, setExporting] = useState(false);
   const limit = 5;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
 
   useEffect(() => {
     dispatch(fetchTasks({ limit, offset: page * limit }));
   }, [dispatch, page]);
+
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Текст скопирован");
+    } catch {
+      toast.error("Не удалось скопировать текст");
+    }
+  };
 
   const handleExport = async () => {
     if (exporting) return;
@@ -86,21 +96,23 @@ const History = () => {
         <div className="space-y-4">
           {tasks.map((task) => (
             <div key={task.id} className="p-3 border rounded">
-              <p className="break-all">
+              <p className="whitespace-pre-wrap break-words">
                 <strong>Исходный:</strong>{" "}
                 {task.original_text.substring(0, 100)}
                 ...
               </p>
-              <p className="break-all">
+              <p className="whitespace-pre-wrap break-words">
                 <strong>Очищенный:</strong> {task.cleaned_text}
               </p>
+              <button
+                type="button"
+                onClick={() => handleCopy(task.cleaned_text)}
+                className="px-3 py-1 mt-2 text-sm text-white bg-blue-500 rounded hover:bg-blue-600 disabled:opacity-50"
+              >
+                Копировать
+              </button>
               <p className="text-sm text-gray-500">
                 {new Date(task.created_at).toLocaleString()}
-                {task.remove_hidden_markers && (
-                  <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded dark:bg-blue-900 dark:text-blue-200">
-                    Скрытые метки удалены
-                  </span>
-                )}
               </p>
             </div>
           ))}
@@ -113,7 +125,7 @@ const History = () => {
           >
             Назад
           </button>
-          <span>Страница {page + 1}</span>
+          <span>Страница {page + 1} из {totalPages}</span>
           <button
             onClick={() => setPage((p) => p + 1)}
             disabled={(page + 1) * limit >= total}

@@ -6,15 +6,16 @@ const cleanText = (text) => {
   if (typeof text !== "string") return "";
   let cleaned = text.replace(/<[^>]*>/g, "");
   // Удаляем скрытые метки и управляющие символы: форматирующие (Cf) — zero-width
-  // пробелы, joiner'ы, BOM, софт-дефис, bidi-метки и т.п., — и все управляющие (Cc)
-  // кроме whitespace-символов (\t, \n, \r, \v, \f, NEL), которые позже схлопнутся
-  // в одиночный пробел.
+  // пробелы, joiner'ы, BOM, софт-дефис, bidi-метки и т.п., — и все управляющие (Cc),
+  // сохраняя whitespace-символы (\t, \n, \r, \v, \f, NEL).
   cleaned = cleaned.replace(/[\p{Cf}\p{Cc}]/gu, (ch) =>
     /[\t\n\r\x0B\x0C\u0085]/.test(ch) ? ch : "",
   );
-  // Схлопываем все пробельные последовательности (включая неразрывные и Unicode-пробелы) в один пробел
-  cleaned = cleaned.replace(/\s+/g, " ");
-  return cleaned.trim();
+  // Нормализуем неразрывные пробелы в обычные
+  cleaned = cleaned.replace(/\u00a0/g, " ");
+  // Нормализуем переводы строк: \r\n и \r → \n
+  cleaned = cleaned.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  return cleaned;
 };
 
 // Вспомогательная функция с таймаутом для Redis
