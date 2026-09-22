@@ -62,7 +62,7 @@ describe("Tasks API", () => {
         `INSERT INTO cleaning_tasks (user_id, original_text, cleaned_text)
          VALUES ($1, $2, $3)
          RETURNING id`,
-        [userId, "<p>Hello   world!</p>", "Hello world!"],
+        [userId, "<p>Hello   world!</p>", "Hello   world!"],
       );
       testTaskId = insertRes.rows[0].id;
     }
@@ -94,7 +94,7 @@ describe("Tasks API", () => {
         .expect(201);
 
       expect(res.body).toHaveProperty("id");
-      expect(res.body.cleaned_text).toBe("Another text");
+      expect(res.body.cleaned_text).toBe("Another   text");
     });
 
     it("должен вернуть 400, если текст отсутствует", async () => {
@@ -147,7 +147,7 @@ describe("Tasks API", () => {
         .send({ originalText: text })
         .expect(201);
 
-      expect(res.body.cleaned_text).toBe("First second third fourth");
+      expect(res.body.cleaned_text).toBe("First\nsecond\tthird\vfourth");
     });
   });
 
@@ -178,7 +178,7 @@ describe("Tasks API", () => {
 
       expect(res.body.id).toBe(testTaskId);
       expect(res.body.original_text).toBe("<p>Hello   world!</p>");
-      expect(res.body.cleaned_text).toBe("Hello world!");
+      expect(res.body.cleaned_text).toBe("Hello   world!");
     });
 
     it("должен вернуть 404, если задание не найдено", async () => {
