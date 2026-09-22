@@ -127,7 +127,7 @@ const NewTask = () => {
               <p className="text-sm text-gray-500 mb-2 dark:text-gray-400">
                 Скрытые метки GPT удалены
               </p>
-              <p className="text-gray-700 break-all dark:text-gray-300">
+              <p className="text-gray-700 whitespace-pre-wrap break-words dark:text-gray-300">
                 {cleaned}
               </p>
               <button
