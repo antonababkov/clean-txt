@@ -149,6 +149,17 @@ describe("Tasks API", () => {
 
       expect(res.body.cleaned_text).toBe("First\nsecond\tthird\vfourth");
     });
+
+    it("должен заменять тире на обычный дефис", async () => {
+      const text = "Часть\u2014раз\u2013и\u2012ещё\u2011\u2015\u2212\u2010end";
+      const res = await request(app)
+        .post("/tasks")
+        .set("Authorization", `Bearer ${userToken}`)
+        .send({ originalText: text })
+        .expect(201);
+
+      expect(res.body.cleaned_text).toBe("Часть-раз-и-ещё----end");
+    });
   });
 
   describe("GET /tasks", () => {

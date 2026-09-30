@@ -11,6 +11,9 @@ const cleanText = (text) => {
   cleaned = cleaned.replace(/[\p{Cf}\p{Cc}]/gu, (ch) =>
     /[\t\n\r\x0B\x0C\u0085]/.test(ch) ? ch : "",
   );
+  // Заменяем тире на обычный дефис: hyphen, non-breaking hyphen, figure dash,
+  // en dash, em dash, horizontal bar (U+2010–U+2015) и minus sign (U+2212)
+  cleaned = cleaned.replace(/[\u2010-\u2015\u2212]/g, "-");
   // Нормализуем неразрывные пробелы в обычные
   cleaned = cleaned.replace(/\u00a0/g, " ");
   // Нормализуем переводы строк: \r\n и \r → \n
@@ -31,7 +34,7 @@ const redisTimeout = (promise, ms = 1000) => {
 export const cleanTextWithCache = async (text) => {
   try {
     const hash = crypto.createHash("sha256").update(text).digest("hex");
-    const key = `clean:${hash}`;
+    const key = `clean:v2:${hash}`;
 
     // Пытаемся получить из кэша с таймаутом 1 секунда
     const cached = await redisTimeout(redis.get(key));
